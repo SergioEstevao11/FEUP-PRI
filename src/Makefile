@@ -26,5 +26,5 @@ plot:
 
 clean:
 	rm -rf __pycache__
-	rm -f clean_*.csv refined_*.csv database.db
+	rm -f ./data/clean_data.csv ./data/refined_data.csv database.db
 
