@@ -26,4 +26,3 @@ clean:
 clean_all: clean
 	rm -f ./data/clean_data.json ./data/refined_data.json
 	rm -rf ./.venv/
-

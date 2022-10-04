@@ -1,7 +1,7 @@
 import requests
 import json
 
-def getTitle(tag):
+def getFieldTitle(tag):
     URL = 'https://arxiv.org/list/'
     url = URL + tag + '/recent'
 
@@ -15,6 +15,10 @@ def getTitle(tag):
 
     result = text[h1Index+4:h1FinalIndex-1]
     return result
+
+def getAreaTitle(tag):
+    pass
+
 
 def main():
     with open('./data/clean_data.json', 'r') as dataset:
@@ -30,7 +34,7 @@ def main():
         
         for tag in urlTags:
             if tag not in tagsDict.keys():
-                tagsDict[tag] = getTitle(tag)
+                tagsDict[tag] = getFieldTitle(tag)
                 nReqs+=1
             
             newTags.append(tagsDict[tag])
