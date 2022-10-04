@@ -1,4 +1,5 @@
 import requests
+import json
 
 def getTitle(tag):
     URL = 'https://arxiv.org/list/'
@@ -15,16 +16,16 @@ def getTitle(tag):
     result = text[h1Index+4:h1FinalIndex-1]
     return result
 
-def importCleanData(path):
-    return 
-
 def main():
+    with open('./data/clean_data.json', 'r') as dataset:
+        papers = json.loads(dataset.read())
+    
     tagsDict = {}
 
     nReqs = 0
 
     for paper in papers:
-        urlTags = paper['tags']
+        urlTags = paper["tags"]
         newTags = []
         
         for tag in urlTags:
@@ -35,4 +36,9 @@ def main():
             newTags.append(tagsDict[tag])
         paper['tags'] = newTags
 
-    print("Number of requests made: ", nReqs)
+    file = open("./data/refined_data.json", "w+")
+    json.dump(papers, file, indent=2)
+
+
+if __name__ == '__main__':
+    main()

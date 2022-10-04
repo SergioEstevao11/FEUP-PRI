@@ -3,7 +3,12 @@ import matplotlib.pyplot as plt
 def piePlot(data, title, path):
     fig = plt.figure(figsize = (15, 10))
 
-    plt.pie(data.values(), labels=data.keys(), autopct='%1.1f%%')
+    pie = plt.pie(data.values(), labels=data.keys(), autopct='%1.1f%%')
+    hatches = ['o' if value==min(data) else 'O' if value==max(data) else '' for value in data]
+
+    for i in range(len(pie[0])):
+        pie[0][i].set(hatch = hatches[i], fill=False)
+
     plt.title(title, fontsize=20)
     plt.axis('equal')
     plt.savefig(path)

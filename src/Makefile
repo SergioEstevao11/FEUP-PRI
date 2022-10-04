@@ -1,16 +1,11 @@
-all: database
+all: refine_data
 
 
 clean_data:
 	python3 clean_data.py
 
-refine_data:
-	clean_data
+refine_data: clean_data
 	python3 refine_data.py
-
-database: 
-	refine_data
-	python3 database.py
 
 install:
 	sudo apt-get install -Y python3 python3-virtualenv sqlite3 gzip
@@ -26,5 +21,9 @@ plot:
 
 clean:
 	rm -rf __pycache__
-	rm -f ./data/clean_data.csv ./data/refined_data.csv database.db
+	rm -rf .ipynb_checkpoints
+
+clean_all: clean
+	rm -f ./data/clean_data.json ./data/refined_data.json
+	rm -rf ./.venv/
 

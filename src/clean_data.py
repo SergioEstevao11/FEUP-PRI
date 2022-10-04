@@ -1,6 +1,5 @@
 import json
 import ast
-import pandas as pd
 
 def contains_number(string):
     return any(char.isdigit() for char in string)
@@ -41,8 +40,9 @@ def main():
         paper.pop('day')
         paper.pop('tag')
 
-        df = pd.DataFrame(papers)
-        df.to_csv('data/clean_data.csv', index=False)  
+
+    file = open("./data/clean_data.json", "w+")
+    json.dump(papers, file, indent=2)
 
 if __name__ == '__main__':
     main()
