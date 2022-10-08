@@ -1,7 +1,7 @@
 import requests
 import json
 
-def getFieldTitle(tag):
+def getTitle(tag):
     URL = 'https://arxiv.org/list/'
     url = URL + tag + '/recent'
 
@@ -26,18 +26,32 @@ def main():
     
     tagsDict = {}
 
-    nReqs = 0
-
     for paper in papers:
         urlTags = paper["tags"]
-        newTags = []
+        newTags = {}
         
         for tag in urlTags:
-            if tag not in tagsDict.keys():
-                tagsDict[tag] = getFieldTitle(tag)
-                nReqs+=1
+
+            tokens = tag.split(".")
+            area = tokens[0]
+            if len(tokens) == 1: field = tokens[0]
+            else: field = tokens[1]
+
+            if area not in tagsDict.keys():
+                tagsDict[area] = getTitle(area)
+
+            if field not in tagsDict.keys():
+                tagsDict[field] = getTitle(tag)
+
+            areaTitle = tagsDict[area]
+            fieldTitle = tagsDict[field]
+
+            if areaTitle not in newTags.keys():
+                newTags[areaTitle] = [fieldTitle]
+            else:
+                newTags[areaTitle].append(fieldTitle)
             
-            newTags.append(tagsDict[tag])
+            
         paper['tags'] = newTags
 
     file = open("./data/refined_data.json", "w+")
