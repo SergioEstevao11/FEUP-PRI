@@ -1,2 +1,1 @@
-./src/data/*.json
-./src/plots/*.json
+/src/**/*.json
