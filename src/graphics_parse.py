@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import json
 
 def piePlot(data, title, path):
     fig = plt.figure(figsize = (15, 10))
@@ -41,3 +42,29 @@ def checkExistance(dict, key):
         dict[key] += 1
     else:
         dict[key] = 1
+
+    
+def plotAreas(papers):
+    areaCounters = {}
+    for paper in papers:
+
+        for area in paper["tags"].keys():
+            if area not in areaCounters.keys():
+                areaCounters[area] = 1
+            else:
+                areaCounters[area] += 1
+
+    piePlot(areaCounters, "Most Common Areas", "../docs/res/areas.jpg")
+    
+
+
+
+def main():
+    with open('./data/refined_data.json', 'r') as dataset:
+        papers = json.loads(dataset.read())
+
+    plotAreas(papers)
+
+
+if __name__ == '__main__':
+    main()

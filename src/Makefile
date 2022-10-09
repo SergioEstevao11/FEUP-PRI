@@ -8,7 +8,7 @@ refine_data:
 	python3 refine_data.py
 
 install:
-	sudo apt-get install -Y python3 python3-virtualenv sqlite3 gzip
+	sudo apt-get install -Y python3 python3-virtualenv
 
 setup: install
 	requirements.txt
@@ -16,7 +16,7 @@ setup: install
 	./.venv/bin/pip install -r requirements.txt
 
 plot:
-	python3 plot.py
+	python3 graphics_parse.py
 
 clean:
 	rm -rf __pycache__
