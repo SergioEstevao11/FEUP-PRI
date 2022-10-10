@@ -4,14 +4,16 @@ import numpy as np
 import random
 
 def piePlot(data, title, path):
+
+    plt.rcParams.update({'font.size': 13})    
     fig = plt.figure(figsize = (15, 10))
 
     explode = [0, 0.5] * 4
 
     print(data)
     pie = plt.pie(data.values(), labels=data.keys(), autopct='%1.1f%%',
-    wedgeprops= {"edgecolor":"black",
-                     'linewidth': 1,
+    wedgeprops= {"edgecolor":"white",
+                     'linewidth': 3,
                      'antialiased': True})
     hatches = ['o' if value==min(data) else 'O' if value==max(data) else '' for value in data]
 
@@ -54,7 +56,7 @@ def checkExistance(dict, key):
     
 def plotAreas(papers):
     areaCounters = {}
-    areaCounters["Others: \n-Quantitative Biology, \n-Electrical Engineering and Systems Science, \n-Quantitative Finance, \n-Economics"] = 0
+    areaCounters["Others: \n-Quantitative Biology, \n-Electrical Eng. and Systems Science, \n-Quantitative Finance, \n-Economics"] = 0
     for paper in papers:
 
         for area in paper["tags"].keys():
@@ -67,7 +69,7 @@ def plotAreas(papers):
 
     for k in areaCounters.keys():
         if areaCounters[k] < 1000:
-            areaCounters["Others: \n-Quantitative Biology, \n-Electrical Engineering and Systems Science, \n-Quantitative Finance, \n-Economics"] += areaCounters[k]
+            areaCounters["Others: \n-Quantitative Biology, \n-Electrical Eng. and Systems Science, \n-Quantitative Finance, \n-Economics"] += areaCounters[k]
             
     del areaCounters["Quantitative Biology"]
     del areaCounters["Electrical Engineering and Systems Science"]

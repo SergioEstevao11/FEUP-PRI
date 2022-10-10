@@ -1,21 +1,14 @@
-all: clean_data refine_data plot
+.PHONY: all refine_data plot clean clean_all
 
+all: clean_data refine_data plot
 
 clean_data:
 	python3 clean_data.py
 
-refine_data:
+refine_data: ./data/clean_data.json
 	python3 refine_data.py
 
-install:
-	sudo apt-get install -Y python3 python3-virtualenv
-
-setup: install
-	requirements.txt
-	virtualenv .venv
-	./.venv/bin/pip install -r requirements.txt
-
-plot:
+plot: ./data/refined_data.json
 	python3 graphics_parse.py
 
 clean:
@@ -23,7 +16,6 @@ clean:
 	rm -rf .ipynb_checkpoints
 
 clean_all: clean
-	rm -f ./data/clean_data.json ./data/refined_data.json
-	rm -rf ./.venv/
-
+	rm ./data/clean_data.json
+	rm ./data/refined_data.json
 
