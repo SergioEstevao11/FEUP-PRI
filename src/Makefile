@@ -1,4 +1,4 @@
-.PHONY: all clean_all
+.PHONY: all refine_data plot clean clean_all
 
 all: clean_data refine_data plot
 
