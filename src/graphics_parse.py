@@ -10,7 +10,7 @@ def piePlot(data, title, path):
 
     explode = [0, 0.5] * 4
 
-    print(data)
+    #print(data)
     pie = plt.pie(data.values(), labels=data.keys(), autopct='%1.1f%%',
     wedgeprops= {"edgecolor":"white",
                      'linewidth': 3,
@@ -77,6 +77,47 @@ def plotAreas(papers):
     del areaCounters["Economics"]
 
     piePlot(areaCounters, "Most Common Areas", "../docs/res/areas.jpg")
+
+
+def plotFields(papers):
+    fieldCounters = {}
+    fieldCounters["Others"] = 0
+    #areaCounters["Others: \n-Quantitative Biology, \n-Electrical Eng. and Systems Science, \n-Quantitative Finance, \n-Economics"] = 0
+    for paper in papers:
+        for area in paper["tags"].keys():
+            for field in paper["tags"][area].keys():
+                if area != "Physics":
+                    continue
+                if field not in fieldCounters.keys():
+                    fieldCounters[field] = 1
+                else:
+                    fieldCounters[field] += 1
+
+    delList = []
+
+    for elem in fieldCounters.keys():
+        if fieldCounters[elem] < 10:
+            fieldCounters["Others"] += fieldCounters[elem]
+            delList.append(elem)
+    print(fieldCounters)
+    for e in delList:
+        if e != "Others":
+            del fieldCounters[e]
+    print(fieldCounters)
+
+
+
+    # for k in areaCounters.keys():
+    #     if areaCounters[k] < 1000:
+    #         areaCounters["Others: \n-Quantitative Biology, \n-Electrical Eng. and Systems Science, \n-Quantitative Finance, \n-Economics"] += areaCounters[k]
+            
+    # del areaCounters["Quantitative Biology"]
+    # del areaCounters["Electrical Engineering and Systems Science"]
+    # del areaCounters["Quantitative Finance"]
+    # del areaCounters["Economics"]
+
+    piePlot(fieldCounters, "Most Common Physics Field", "../docs/res/field.jpg")
+
     
 
 
@@ -85,7 +126,7 @@ def main():
     with open('./data/refined_data.json', 'r') as dataset:
         papers = json.loads(dataset.read())
 
-    plotAreas(papers)
+    plotFields(papers)
 
     # areaCounters = {}
     # #areaCounters["Others"] = 0
