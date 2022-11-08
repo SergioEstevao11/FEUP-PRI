@@ -58,7 +58,7 @@ def getMainAreaTitle(area):
 def main():
     with open('./data/clean_data.json', 'r') as dataset:
         papers = json.loads(dataset.read())
-    
+
     updatedTags = {}
     tagsDict = {}
     areaDict = {}
@@ -67,7 +67,7 @@ def main():
 
         urlTags = paper["tags"]
         newTags = {}
-        
+
         for tag in urlTags:
 
             if tag not in updatedTags.keys():
@@ -98,16 +98,16 @@ def main():
 
             if areaTitle not in newTags.keys():
                 newTags[areaTitle] = {}
-            
 
-            if fieldTitle not in newTags[areaTitle].keys():    
+
+            if fieldTitle not in newTags[areaTitle].keys():
                 newTags[areaTitle][fieldTitle] = [specTitle]
             elif specTitle not in newTags[areaTitle][fieldTitle]:
                 newTags[areaTitle][fieldTitle].append(specTitle)
 
 
-            
-            
+
+
         paper['tags'] = newTags
 
     file = open("./data/refined_data.json", "w+")
