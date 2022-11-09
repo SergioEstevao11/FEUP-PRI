@@ -50,6 +50,21 @@
             "multiValued": true
         },
         {
+            "name": "areas",
+            "type": "text_en",
+            "multiValued": true
+        },
+        {
+            "name": "fields",
+            "type": "text_en",
+            "multiValued": true
+        },
+        {
+            "name": "subjects",
+            "type": "text_en",
+            "multiValued": true
+        },
+        {
             "name": "date",
             "type": "date"
         },
