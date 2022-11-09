@@ -1,0 +1,61 @@
+{
+    "add-field-type": [
+    {
+        "name":"title",
+        "class":"solr.TextField",
+        "indexAnalyzer":{
+            "tokenizer":{
+                "class":"solr.StandardTokenizerFactory"
+            },
+            "filters":[
+                {"class":"solr.ASCIIFoldingFilterFactory", "preserveOriginal":true},
+                {"class":"solr.LowerCaseFilterFactory"}
+            ]
+        },
+        "queryAnalyzer":{
+            "tokenizer":{
+                "class":"solr.StandardTokenizerFactory"
+            },
+            "filters":[
+                {"class":"solr.ASCIIFoldingFilterFactory", "preserveOriginal":true},
+                {"class":"solr.LowerCaseFilterFactory"}
+            ]
+        }
+    },
+    {
+        "name": "uiString",
+        "class": "solr.StrField",
+        "indexed": false,
+        "docValues": false
+    },
+    {
+        "name": "date",
+        "class": "solr.DatePointField"
+    }
+    ],
+    "add-field": [
+        {
+            "name": "title",
+            "type": "title",
+            "indexed": true
+        },
+        {
+            "name": "summary",
+            "type": "text_en",
+            "indexed": true
+        },
+        {
+            "name": "authors",
+            "type": "text_en",
+            "multiValued": true
+        },
+        {
+            "name": "date",
+            "type": "date"
+        },
+        {
+            "name": "link",
+            "type": "uiString"
+        }
+    ]
+}
