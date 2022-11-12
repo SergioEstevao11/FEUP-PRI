@@ -1,76 +1,96 @@
 {
     "add-field-type": [
     {
-        "name":"title",
+        "name":"summary",
         "class":"solr.TextField",
         "indexAnalyzer":{
-            "tokenizer":{
-                "class":"solr.StandardTokenizerFactory"
+            "charFilter": {
+                "class":"solr.MappingCharFilterFactory", "mapping":"mapping-FoldToASCII.txt"
             },
-            "filters":[
+            "tokenizer":{
+                "class":"solr.ClassicTokenizerFactory"
+            },
+            "filters":[                
+                {"class":"solr.ClassicFilterFactory"},
+                {"class":"solr.LowerCaseFilterFactory"},
                 {"class":"solr.ASCIIFoldingFilterFactory", "preserveOriginal":true},
-                {"class":"solr.LowerCaseFilterFactory"}
+                {"class":"solr.EnglishPorterFilterFactory"},
+                {"class":"solr.StopFilterFactory", "ignoreCase":true, "words":"stopwords.txt"},
+                {"class":"solr.SynonymGraphFilterFactory", "synonyms":"synonyms.txt"}, 
+                {"class":"solr.FlattenGraphFilterFactory"},
+                {"class":"solr.PhoneticFilterFactory", "encoder":"DoubleMetaphone"},
+                {"class":"solr.RemoveDuplicatesTokenFilterFactory"}
             ]
         },
         "queryAnalyzer":{
             "tokenizer":{
-                "class":"solr.StandardTokenizerFactory"
+                "class":"solr.ClassicTokenizerFactory"
             },
             "filters":[
+                {"class":"solr.ClassicFilterFactory"},
+                {"class":"solr.LowerCaseFilterFactory"},
                 {"class":"solr.ASCIIFoldingFilterFactory", "preserveOriginal":true},
-                {"class":"solr.LowerCaseFilterFactory"}
+                {"class":"solr.SynonymGraphFilterFactory", "synonyms":"synonyms.txt"},
+                {"class":"solr.PhoneticFilterFactory", "encoder":"DoubleMetaphone"},
+                {"class":"solr.RemoveDuplicatesTokenFilterFactory"}
             ]
         }
     },
     {
-        "name": "uiString",
-        "class": "solr.StrField",
-        "indexed": false,
-        "docValues": false
-    },
-    {
         "name": "date",
         "class": "solr.DatePointField"
+    },
+    {
+        "name": "link",
+        "class": "solr.UAX29URLEmailTokenizerFactory"
     }
     ],
     "add-field": [
         {
             "name": "title",
-            "type": "title",
-            "indexed": true
+            "type": "summary",
+            "indexed": true,
+            "required": true
         },
         {
             "name": "summary",
-            "type": "text_en",
-            "indexed": true
+            "type": "summary",
+            "indexed": true,
+            "required": true
         },
         {
             "name": "authors",
             "type": "text_en",
-            "multiValued": true
+            "multiValued": true,
+            "required": true
         },
         {
             "name": "areas",
             "type": "text_en",
-            "multiValued": true
+            "multiValued": true,
+            "required": true
         },
         {
             "name": "fields",
             "type": "text_en",
-            "multiValued": true
+            "multiValued": true,
+            "required": true
         },
         {
             "name": "subjects",
             "type": "text_en",
-            "multiValued": true
+            "multiValued": true,
+            "required": true
         },
         {
             "name": "date",
-            "type": "date"
+            "type": "date",
+            "required": true
         },
         {
             "name": "link",
-            "type": "uiString"
+            "type": "link",
+            "required": true
         }
     ]
 }
