@@ -7,8 +7,8 @@ import pandas as pd
 
 #data for query evalution
 BOOSTED = False
-QUERY_ID = "q1"
-QUERY_URL = "http://localhost:8983/solr/papers/select?defType=edismax&indent=true&q.op=OR&q=velocity&qf=link%20summary%20title%20authors%20date%20areas%20fields%20subjects&rows=100"
+QUERY_ID = "q4"
+QUERY_URL = "http://localhost:8983/solr/papers/select?defType=dismax&indent=true&q.op=AND&q=new%20approaches&qf=link%20summary%20title%20authors%20date%20areas%20fields%20subjects&rows=50"
 
 def precision(result, relevants, n=10):
     return len(set(result[:n]) & set(relevants)) / n
@@ -146,8 +146,21 @@ def query_evalution():
 
 
 def main():
-    schema_evalution()
+    #schema_evalution()
     #query_evalution()
+
+    #simple query evaluation
+    result = requests.get(QUERY_URL).json()['response']['docs']
+    result = list(map(lambda x: x['id'], result))
+    relevants = list(map(lambda el: el.rstrip(), open("./queries/" + QUERY_ID + "/relevants.txt").readlines()))
+
+    p = precision(result, relevants)
+    r = recall(result, relevants)
+    # f = f1(result, relevants)
+
+    print("precision: ", p)
+    print("recall: ", r)
+    # print("f1: ", f)
 
 
 

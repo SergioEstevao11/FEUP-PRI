@@ -5,7 +5,7 @@ def tags_oneident():
     with open('./data/refined_data.json', 'r') as dataset:
         papers = json.loads(dataset.read())
 
-
+    counter = 0
     for paper in papers:
 
         tags = []
@@ -23,6 +23,8 @@ def tags_oneident():
             tags.append(tag)
 
         paper['tagsNew'] = tags
+        paper['id'] = counter
+        counter += 1
 
         paper.pop('tags')
 
@@ -34,7 +36,7 @@ def main():
     with open('./data/refined_data.json', 'r') as dataset:
         papers = json.loads(dataset.read())
 
-
+    counter = 0
     for paper in papers:
 
         areas = []
@@ -51,6 +53,8 @@ def main():
         paper['areas'] = areas
         paper['fields'] = fields
         paper['subjects'] = subjects
+        paper['id'] = counter
+        counter += 1
 
         paper.pop('tags')
 
