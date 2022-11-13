@@ -43,16 +43,8 @@
             "class": "solr.LowerCaseTokenizerFactory"
           },
           "filters": [
-            {
-              "class": "solr.CommonGramsFilterFactory"
-            },
-            {
-              "class": "solr.BeiderMorseFilterFactory",
-              "nameType": "GENERIC",
-              "ruleType": "APPROX",
-              "concat": true,
-              "languageSet": "auto"
-            }
+            {"class": "solr.CommonGramsFilterFactory"},
+            {"class": "solr.BeiderMorseFilterFactory", "nameType": "GENERIC", "ruleType": "APPROX", "concat": true, "languageSet": "auto"}
           ]
         }
     },
