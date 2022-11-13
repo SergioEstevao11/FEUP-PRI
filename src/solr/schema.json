@@ -51,30 +51,6 @@
         }
     },
     {
-        "name":"names",
-        "class":"solr.TextField",
-        "indexAnalyzer":{
-            "tokenizer":{
-                "class":"solr.ClassicTokenizerFactory"
-            },
-            "filters":[                
-                {"class":"solr.ClassicFilterFactory"},
-                {"class":"solr.LowerCaseFilterFactory"},
-                {"class":"solr.ASCIIFoldingFilterFactory", "preserveOriginal":true}
-            ]
-        },
-        "queryAnalyzer":{
-            "tokenizer":{
-                "class":"solr.ClassicTokenizerFactory"
-            },
-            "filters":[
-                {"class":"solr.ClassicFilterFactory"},
-                {"class":"solr.LowerCaseFilterFactory"},
-                {"class":"solr.ASCIIFoldingFilterFactory", "preserveOriginal":true}
-            ]
-        }
-    },
-    {
         "name": "date",
         "class": "solr.DatePointField"
     }
@@ -95,25 +71,25 @@
         },
         {
             "name": "authors",
-            "type": "names",
+            "type": "text_en",
             "multiValued": true,
             "required": true
         },
         {
             "name": "areas",
-            "type": "names",
+            "type": "text_en",
             "multiValued": true,
             "required": true
         },
         {
             "name": "fields",
-            "type": "names",
+            "type": "text_en",
             "multiValued": true,
             "required": true
         },
         {
             "name": "subjects",
-            "type": "names",
+            "type": "text_en",
             "multiValued": true,
             "required": true
         },
