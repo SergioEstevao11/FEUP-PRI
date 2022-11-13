@@ -1,0 +1,84 @@
+{
+    "add-field-type": [
+    {
+        "name":"summary",
+        "class":"solr.TextField",
+        "indexAnalyzer":{
+            "tokenizer":{
+                "class":"solr.ClassicTokenizerFactory"
+            },
+            "filters":[                
+                {"class":"solr.ClassicFilterFactory"},
+                {"class":"solr.LowerCaseFilterFactory"},
+                {"class":"solr.ASCIIFoldingFilterFactory", "preserveOriginal":true},
+                {"class":"solr.EnglishPorterFilterFactory"},
+                {"class":"solr.RemoveDuplicatesTokenFilterFactory"}
+            ]
+        },
+        "queryAnalyzer":{
+            "tokenizer":{
+                "class":"solr.ClassicTokenizerFactory"
+            },
+            "filters":[
+                {"class":"solr.ClassicFilterFactory"},
+                {"class":"solr.LowerCaseFilterFactory"},
+                {"class":"solr.ASCIIFoldingFilterFactory", "preserveOriginal":true},
+                {"class":"solr.PhoneticFilterFactory", "encoder":"DoubleMetaphone"},
+                {"class":"solr.RemoveDuplicatesTokenFilterFactory"}
+            ]
+        }
+    },
+    {
+        "name": "date",
+        "class": "solr.DatePointField"
+    }
+    ],
+    "add-field": [
+        {
+            "name": "title",
+            "type": "summary",
+            "indexed": true,
+            "required": true
+        },
+        {
+            "name": "summary",
+            "type": "summary",
+            "indexed": true,
+            "required": true
+        },
+        {
+            "name": "authors",
+            "type": "text_en",
+            "multiValued": true,
+            "required": true
+        },
+        {
+            "name": "areas",
+            "type": "text_en",
+            "multiValued": true,
+            "required": true
+        },
+        {
+            "name": "fields",
+            "type": "text_en",
+            "multiValued": true,
+            "required": true
+        },
+        {
+            "name": "subjects",
+            "type": "text_en",
+            "multiValued": true,
+            "required": true
+        },
+        {
+            "name": "date",
+            "type": "date",
+            "required": true
+        },
+        {
+            "name": "link",
+            "type": "text_en",
+            "required": true
+        }
+    ]
+}
