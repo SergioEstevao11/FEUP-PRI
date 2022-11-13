@@ -1,0 +1,1 @@
+http://localhost:8983/solr/#/papers/query?q=black%20hole&q.op=OR&defType=edismax&indent=true&rows=100&qf=link%20summary%20title%20authors%20date%20areas%20fields%20subjects

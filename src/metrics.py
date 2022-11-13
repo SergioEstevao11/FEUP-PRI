@@ -6,7 +6,7 @@ import numpy as np
 import pandas as pd
 
 BOOSTED = False
-QUERY_ID = "queries/q2"
+QUERY_ID = "q2"
 QUERY_URL = "http://localhost:8983/solr/papers/select?defType=edismax&indent=true&q.op=OR&q=black%20hole&qf=link%20summary%20title%20authors%20date%20areas%20fields%20subjects&rows=100"
 
 def precision(result, relevants):
@@ -37,10 +37,40 @@ def plot_precision_recall_curve_from_df(df, title):
     average_precision = df["average_precision"].to_numpy()
     plot_precision_recall_curve(precision, recall, average_precision, title)
 
+def schema_evalution():
+    #MEAN AVERAGE PRECISION
+    #MEAN AVERAGE RECALL
+    #MEAN AVERAGE F1
+    queries = list(map(lambda el: el.rstrip(), open("queries/allqueries.txt").readlines()))
+    relevants = list( list(map(lambda el: el.rstrip(), open("./queries/q" + id + "/relevants.txt").readlines())) for id in range(len(queries)))
+    results = list(map(lambda url: requests.get(url).json()['response']['docs'], queries))
+
+    precisions = [precision(results[i], relevants[i]) for i in range(len(results))]
+    recalls = [recall(results[i], relevants[i]) for i in range(len(results))]
+    f1s = [f1(results[i], relevants[i]) for i in range(len(results))]
+    print("average precision: ", sum(precisions) / len(precisions))
+    print("average recall: ", sum(recalls) / len(recalls))
+    print("average f1: ", sum(f1s) / len(f1s))
+
+
+    X_axis = np.arange(len(queries))
+
+    plt.bar(X_axis - 0.2, precisions, 0.4, label = 'Precision')
+    plt.bar(X_axis + 0.2, recalls, 0.4, label = 'Recall')
+    
+    plt.xticks(X_axis, map(lambda x: "q" + str(x), range(len(queries))))
+    plt.xlabel("Groups")
+    plt.ylabel("Number of Students")
+    plt.title("Number of Students in each group")
+    plt.legend()
+    plt.savefig("./queries/allqueries.pdf")
+
+
+
 def main():
     result = requests.get(QUERY_URL).json()['response']['docs']
     result = set(map(lambda x: x['id'], result))
-    relevants = list(map(lambda el: el.rstrip(), open("./" + QUERY_ID + "/relevants.txt").readlines()))
+    relevants = list(map(lambda el: el.rstrip(), open("./queries/" + QUERY_ID + "/relevants.txt").readlines()))
     
     precision_values = [precision(result, relevants[:i]) for i in range(1, len(relevants) + 1)]
     recall_values = [recall(result, relevants[:i]) for i in range(1, len(relevants) + 1)]
