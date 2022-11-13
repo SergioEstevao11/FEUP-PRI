@@ -4,9 +4,6 @@
         "name":"summary",
         "class":"solr.TextField",
         "indexAnalyzer":{
-            "charFilter": {
-                "class":"solr.MappingCharFilterFactory", "mapping":"mapping-FoldToASCII.txt"
-            },
             "tokenizer":{
                 "class":"solr.ClassicTokenizerFactory"
             },
@@ -15,10 +12,6 @@
                 {"class":"solr.LowerCaseFilterFactory"},
                 {"class":"solr.ASCIIFoldingFilterFactory", "preserveOriginal":true},
                 {"class":"solr.EnglishPorterFilterFactory"},
-                {"class":"solr.StopFilterFactory", "ignoreCase":true, "words":"stopwords.txt"},
-                {"class":"solr.SynonymGraphFilterFactory", "synonyms":"synonyms.txt"}, 
-                {"class":"solr.FlattenGraphFilterFactory"},
-                {"class":"solr.PhoneticFilterFactory", "encoder":"DoubleMetaphone"},
                 {"class":"solr.RemoveDuplicatesTokenFilterFactory"}
             ]
         },
@@ -30,8 +23,6 @@
                 {"class":"solr.ClassicFilterFactory"},
                 {"class":"solr.LowerCaseFilterFactory"},
                 {"class":"solr.ASCIIFoldingFilterFactory", "preserveOriginal":true},
-                {"class":"solr.StopFilterFactory", "ignoreCase":true, "words":"stopwords.txt"},
-                {"class":"solr.SynonymGraphFilterFactory", "synonyms":"synonyms.txt"},
                 {"class":"solr.PhoneticFilterFactory", "encoder":"DoubleMetaphone"},
                 {"class":"solr.RemoveDuplicatesTokenFilterFactory"}
             ]
@@ -40,10 +31,6 @@
     {
         "name": "date",
         "class": "solr.DatePointField"
-    },
-    {
-        "name": "link",
-        "class": "solr.UAX29URLEmailTokenizerFactory"
     }
     ],
     "add-field": [
@@ -90,7 +77,7 @@
         },
         {
             "name": "link",
-            "type": "link",
+            "type": "text_en",
             "required": true
         }
     ]
