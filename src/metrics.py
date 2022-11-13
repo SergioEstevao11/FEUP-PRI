@@ -50,10 +50,10 @@ def schema_evalution():
 
     precisions = [precision(results[i], relevants[i]) for i in range(len(results))]
     recalls = [recall(results[i], relevants[i]) for i in range(len(results))]
-    f1s = [f1(results[i], relevants[i]) for i in range(len(results))]
+    # f1s = [f1(results[i], relevants[i]) for i in range(len(results))]
     print("average precision: ", sum(precisions) / len(precisions))
     print("average recall: ", sum(recalls) / len(recalls))
-    print("average f1: ", sum(f1s) / len(f1s))
+    # print("average f1: ", sum(f1s) / len(f1s))
 
 
     X_axis = np.arange(len(queries))
@@ -91,7 +91,6 @@ def schema_evalution():
     df = pd.DataFrame.from_dict(frst, orient='index')
     df.columns = ["precision"]
     df["recall"] = df.index
-    print("df: \n", df)
     ax = \
     df.plot.line(x='recall', y='precision', markersize=3, style='-o', label="Q1", figsize=(9, 6))
 
@@ -146,20 +145,20 @@ def query_evalution():
 
 
 def main():
-    #schema_evalution()
+    schema_evalution()
     #query_evalution()
 
     #simple query evaluation
-    result = requests.get(QUERY_URL).json()['response']['docs']
-    result = list(map(lambda x: x['id'], result))
-    relevants = list(map(lambda el: el.rstrip(), open("./queries/" + QUERY_ID + "/relevants.txt").readlines()))
+    # result = requests.get(QUERY_URL).json()['response']['docs']
+    # result = list(map(lambda x: x['id'], result))
+    # relevants = list(map(lambda el: el.rstrip(), open("./queries/" + QUERY_ID + "/relevants.txt").readlines()))
 
-    p = precision(result, relevants)
-    r = recall(result, relevants)
+    # p = precision(result, relevants)
+    # r = recall(result, relevants)
     # f = f1(result, relevants)
 
-    print("precision: ", p)
-    print("recall: ", r)
+    # print("precision: ", p)
+    # print("recall: ", r)
     # print("f1: ", f)
 
 
