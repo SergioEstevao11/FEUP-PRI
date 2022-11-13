@@ -1,7 +1,7 @@
 {
     "add-field-type": [
     {
-        "name":"summary",
+        "name":"titleType",
         "class":"solr.TextField",
         "indexAnalyzer":{
             "charFilter": {
@@ -27,7 +27,6 @@
             "filters":[
                 {"class":"solr.ClassicFilterFactory"},
                 {"class":"solr.LowerCaseFilterFactory"},
-                {"class":"solr.ASCIIFoldingFilterFactory", "preserveOriginal":true},
                 {"class":"solr.StopFilterFactory", "ignoreCase":true, "words":"stopwords.txt"},
                 {"class":"solr.SynonymGraphFilterFactory", "synonyms":"synonyms.txt"},
                 {"class":"solr.PhoneticFilterFactory", "encoder":"DoubleMetaphone"},
@@ -36,13 +35,16 @@
         }
     },
     {
-        "name": "titleType",
+        "name": "summary",
         "class": "solr.TextField",
         "analyzer": {
           "tokenizer": {
-            "class": "solr.LowerCaseTokenizerFactory"
+            "class":"solr.ClassicTokenizerFactory"
           },
           "filters": [
+            {"class":"solr.ClassicFilterFactory"},
+            {"class":"solr.ASCIIFoldingFilterFactory", "preserveOriginal":true},
+            {"class":"solr.StopFilterFactory", "ignoreCase":true, "words":"stopwords.txt"},
             {"class": "solr.CommonGramsFilterFactory"},
             {"class": "solr.BeiderMorseFilterFactory", "nameType": "GENERIC", "ruleType": "APPROX", "concat": true, "languageSet": "auto"}
           ]
