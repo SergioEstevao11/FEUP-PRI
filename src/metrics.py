@@ -7,8 +7,8 @@ import pandas as pd
 
 #data for query evalution
 BOOSTED = False
-QUERY_ID = "q2"
-QUERY_URL = "http://localhost:8983/solr/papers/select?defType=edismax&indent=true&q.op=OR&q=black%20hole&qf=link%20summary%20title%20authors%20date%20areas%20fields%20subjects&rows=100"
+QUERY_ID = "q1"
+QUERY_URL = "http://localhost:8983/solr/papers/select?defType=edismax&indent=true&q.op=OR&q=velocity&qf=link%20summary%20title%20authors%20date%20areas%20fields%20subjects&rows=100"
 
 def precision(result, relevants, n=10):
     return len(set(result[:n]) & set(relevants)) / n
