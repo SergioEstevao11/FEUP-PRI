@@ -61,16 +61,18 @@ def schema_evalution():
     plt.bar(X_axis + 0.2, recalls, 0.4, label = 'Recall')
     
     plt.xticks(X_axis, map(lambda x: "q" + str(x), range(len(queries))))
-    plt.xlabel("Groups")
-    plt.ylabel("Number of Students")
-    plt.title("Number of Students in each group")
+    plt.xlabel("Queries")
+    plt.title("Precision and Recall for each query")
     plt.legend()
     plt.savefig("./queries/allqueries.pdf")
 
 
 
 def main():
+    """schema evalution"""
     schema_evalution()
+
+    """query evalution"""
     # result = requests.get(QUERY_URL).json()['response']['docs']
     # result = set(map(lambda x: x['id'], result))
     # relevants = list(map(lambda el: el.rstrip(), open("./queries/" + QUERY_ID + "/relevants.txt").readlines()))
