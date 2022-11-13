@@ -33,4 +33,4 @@ qf: link summary title authors date area field subjects
 defType: edismax
 ```
 
-`http://localhost:8983/solr/#/papers/query?q=black%20hole&q.op=OR&defType=edismax&indent=true&rows=100&qf=link%20summary%20title%20authors%20date%20areas%20fields%20subjects`
+`http://localhost:8983/solr/papers/select?defType=edismax&indent=true&q.op=OR&q=black%20hole&qf=link%20summary%20title%20authors%20date%20areas%20fields%20subjects&rows=100`
