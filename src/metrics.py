@@ -51,7 +51,7 @@ def schema_evalution():
         results[i] = list(map(lambda x: x['id'], results[i]))
 
     precisions = [precision(results[i], relevants[i]) for i in range(len(results))]
-    recalls = [recall(results[i], relevants[i]) for i in range(len(results))]
+    recalls = [recall(results[i], relevants[i], len(results[i])+1) for i in range(len(results))]
     # f1s = [f1(results[i], relevants[i]) for i in range(len(results))]
     print("average precision: ", sum(precisions) / len(precisions))
     print("average recall: ", sum(recalls) / len(recalls))
@@ -60,7 +60,8 @@ def schema_evalution():
 
     X_axis = np.arange(len(queries))
 
-    plt.bar(X_axis - 0.2, precisions, 0.4, label = 'Precision')
+
+    plt.bar(X_axis - 0.2, precisions, 0.4, label = 'Precision@10')
     plt.bar(X_axis + 0.2, recalls, 0.4, label = 'Recall')
     
     plt.xticks(X_axis, map(lambda x: "q" + str(x+1), range(len(queries))))
@@ -71,8 +72,10 @@ def schema_evalution():
 
     precision_recall_match = []
     for j in range(len(queries)):
-        precision_values = [precision(results[j], relevants[j], i) for i in range(1, len(results[j]) + 1)]
-        recall_values = [recall(results[j], relevants[j], i) for i in range(1, len(results[j]) + 1)]
+        # precision_values = [precision(results[j], relevants[j], i) for i in range(1, len(results[j]) + 1)]
+        # recall_values = [recall(results[j], relevants[j], i) for i in range(1, len(results[j]) + 1)]
+        precision_values = [precision(results[j], relevants[j], i) for i in range(1, 51)]
+        recall_values = [recall(results[j], relevants[j], i) for i in range(1, 51)]
         precision_recall_match.append( {k: v for k,v in zip(recall_values, precision_values)})
         print("og_recall: ", recall_values)
         print("og_precision: ", precision_values)
