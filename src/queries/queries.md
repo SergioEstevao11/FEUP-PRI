@@ -46,7 +46,7 @@ defType: edismax
 
 ### 3.
 
-A Writer wants to writer a biography about Francis Bach, but wants to focus on his algorithmic work in the years 2014 until 2017, specially, in the year of 2015.
+A Writer wants to write a biography about Francis Bach, but wants to focus on his algorithmic work in the years 2014 until 2017, especially, in the year of 2015.
 
 Query:
 ```
@@ -68,7 +68,7 @@ defType: edismax
 
 ### 4.
 
-A researcher that wants to try some new approaches on their work.
+A researcher that wants to try some new approaches to their work.
 
 Query:
 ```
@@ -90,7 +90,7 @@ defType: edismax
 
 ### 5.
 
-A student that wants to get all the papers related economics and to the Artificial Intelligence subject, in the year of 2017.
+A student that wants to get all the papers related to economics and to Artificial Intelligence subject, in the year 2017.
 
 Query:
 ```
