@@ -6,9 +6,9 @@ import numpy as np
 import pandas as pd
 
 #data for query evalution
-BOOSTED = False
-QUERY_ID = "q1"
-QUERY_URL = "http://localhost:8983/solr/papers/select?defType=edismax&indent=true&q.op=OR&q=velocity&qf=link%20summary%20title%20authors%20date%20areas%20fields%20subjects&rows=100"
+BOOSTED = True
+QUERY_ID = "q5"
+QUERY_URL = "http://localhost:8983/solr/papers/select?defType=dismax&fq=date%3A%5B2017-01-01T00%3A00%3A00Z%20TO%202018-01-01T00%3A00%3A00Z%7D&indent=true&q.op=AND&q=computer%20science%20economics&qf=link%20summary%20title%20authors%20date%20areas%5E5%20fields%5E5%20subjects%5E5&rows=50"
 
 def precision(result, relevants, n=10):
     return len(set(result[:n]) & set(relevants)) / n
@@ -155,8 +155,8 @@ def query_evalution():
 
 
 def main():
-    schema_evalution()
-    #query_evalution()
+    #schema_evalution()
+    query_evalution()
 
     #simple query evaluation
     # result = requests.get(QUERY_URL).json()['response']['docs']
