@@ -6,7 +6,7 @@ import numpy as np
 import pandas as pd
 
 #data for query evalution
-BOOSTED = False
+BOOSTED = True
 QUERY_ID = "q4"
 QUERY_URL = "http://localhost:8983/solr/papers/select?defType=dismax&indent=true&q.op=AND&q=new%20approaches&qf=link%20summary%20title%20authors%20date%20areas%20fields%20subjects&rows=50"
 
@@ -71,8 +71,8 @@ def schema_evalution():
 
     precision_recall_match = []
     for j in range(len(queries)):
-        precision_values = [precision(results[j], relevants[j], i) for i in range(1, len(relevants[j]) + 1)]
-        recall_values = [recall(results[j], relevants[j], i) for i in range(1, len(relevants[j]) + 1)]
+        precision_values = [precision(results[j], relevants[j], i) for i in range(1, len(results[j]) + 1)]
+        recall_values = [recall(results[j], relevants[j], i) for i in range(1, len(results[j]) + 1)]
         precision_recall_match.append( {k: v for k,v in zip(recall_values, precision_values)})
         print("og_recall: ", recall_values)
         print("og_precision: ", precision_values)
