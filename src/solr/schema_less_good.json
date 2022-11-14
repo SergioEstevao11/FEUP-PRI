@@ -7,7 +7,7 @@
             "filters":[                
                 {"class":"solr.ClassicFilterFactory"},
                 {"class":"solr.LowerCaseFilterFactory"},
-                {"class":"solr.ASCIIFoldingFilterFactory", "preserveOriginal":true},
+                {"class":"solr.ASCIIFoldingFilterFactory", "preserveOriginal":true}
             ]
         },
         "queryAnalyzer":{
@@ -34,7 +34,7 @@
           "filters": [
             {"class":"solr.ClassicFilterFactory"},
             {"class":"solr.ASCIIFoldingFilterFactory", "preserveOriginal":true},
-            {"class":"solr.StopFilterFactory", "ignoreCase":true, "words":"stopwords.txt"},
+            {"class":"solr.StopFilterFactory", "ignoreCase":true, "words":"stopwords.txt"}
           ]
         }
     },
