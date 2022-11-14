@@ -4,6 +4,9 @@
         "name":"titleType",
         "class":"solr.TextField",
         "indexAnalyzer":{
+            "tokenizer":{
+                "class":"solr.ClassicTokenizerFactory"
+            },
             "filters":[                
                 {"class":"solr.ClassicFilterFactory"},
                 {"class":"solr.LowerCaseFilterFactory"},
@@ -31,7 +34,7 @@
     {
         "name": "summary",
         "class": "solr.TextField",
-        "analyzer": {
+        "indexAnalyzer": {
           "tokenizer": {
             "class":"solr.ClassicTokenizerFactory"
           },
@@ -42,6 +45,18 @@
             {"class": "solr.CommonGramsFilterFactory"},
             {"class": "solr.BeiderMorseFilterFactory", "nameType": "GENERIC", "ruleType": "APPROX", "concat": true, "languageSet": "auto"}
           ]
+        },
+        "queryAnalyzer":{
+            "tokenizer":{
+                "class":"solr.ClassicTokenizerFactory"
+            },
+            "filters":[
+                {"class":"solr.ClassicFilterFactory"},
+                {"class":"solr.LowerCaseFilterFactory"},
+                {"class":"solr.SynonymGraphFilterFactory", "synonyms":"synonyms.txt"},
+                {"class":"solr.PhoneticFilterFactory", "encoder":"DoubleMetaphone"},
+                {"class":"solr.RemoveDuplicatesTokenFilterFactory"}
+            ]
         }
     },
     {

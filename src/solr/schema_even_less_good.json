@@ -4,6 +4,9 @@
         "name":"titleType",
         "class":"solr.TextField",
         "indexAnalyzer":{
+            "tokenizer": {
+                "class":"solr.ClassicTokenizerFactory"
+            },
             "filters":[                
                 {"class":"solr.ClassicFilterFactory"},
                 {"class":"solr.LowerCaseFilterFactory"},
@@ -23,7 +26,7 @@
     {
         "name": "summary",
         "class": "solr.TextField",
-        "analyzer": {
+        "indexAnalyzer": {
           "tokenizer": {
             "class":"solr.ClassicTokenizerFactory"
           },
@@ -31,6 +34,15 @@
             {"class":"solr.ClassicFilterFactory"},
             {"class":"solr.ASCIIFoldingFilterFactory", "preserveOriginal":true}
           ]
+        },
+        "queryAnalyzer":{
+            "tokenizer":{
+                "class":"solr.ClassicTokenizerFactory"
+            },
+            "filters":[
+                {"class":"solr.ClassicFilterFactory"},
+                {"class":"solr.LowerCaseFilterFactory"}
+            ]
         }
     },
     {

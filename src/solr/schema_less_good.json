@@ -4,6 +4,9 @@
         "name":"titleType",
         "class":"solr.TextField",
         "indexAnalyzer":{
+            "tokenizer": {
+                "class":"solr.ClassicTokenizerFactory"
+            },
             "filters":[                
                 {"class":"solr.ClassicFilterFactory"},
                 {"class":"solr.LowerCaseFilterFactory"},
@@ -27,7 +30,7 @@
     {
         "name": "summary",
         "class": "solr.TextField",
-        "analyzer": {
+        "indexAnalyzer": {
           "tokenizer": {
             "class":"solr.ClassicTokenizerFactory"
           },
@@ -36,6 +39,16 @@
             {"class":"solr.ASCIIFoldingFilterFactory", "preserveOriginal":true},
             {"class":"solr.StopFilterFactory", "ignoreCase":true, "words":"stopwords.txt"}
           ]
+        },
+        "queryAnalyzer":{
+            "tokenizer":{
+                "class":"solr.ClassicTokenizerFactory"
+            },
+            "filters":[
+                {"class":"solr.ClassicFilterFactory"},
+                {"class":"solr.LowerCaseFilterFactory"},
+                {"class":"solr.SynonymGraphFilterFactory", "synonyms":"synonyms.txt"}
+            ]
         }
     },
     {
