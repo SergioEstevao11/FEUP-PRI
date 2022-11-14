@@ -80,7 +80,7 @@ defType: edismax
 
 Boosted:
 ```
-q: new approaches
+q: areas:(statistics) new approaches linguistics
 qf: link summary title^2 authors date areas fields subjects
 pf: title^10
 defType: edismax
