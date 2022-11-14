@@ -68,15 +68,15 @@ defType: edismax
 
 ### 4.
 
-A researcher that wants to try some new approaches on their work.
+A researcher in the area of Statistics wants to try some new approaches related to his case study in linguistics.
 
 Query:
 ```
-q: new approaches
+q: areas:(statistics) new approaches linguistics
 qf: link summary title authors date areas fields subjects
 defType: edismax
 ```
-`http://localhost:8983/solr/#/papers/query?q=new%20approaches&q.op=AND&defType=dismax&indent=true&qf=link%20summary%20title%20authors%20date%20areas%20fields%20subjects&rows=50`
+`http://localhost:8983/solr/#/papers/query?q=areas:(statistics)%20new%20approaches%20linguistics&q.op=AND&defType=edismax&indent=true&qf=link%20summary%20title%20authors%20date%20areas%20fields%20subjects&rows=50`
 
 Boosted:
 ```
@@ -85,7 +85,7 @@ qf: link summary title^2 authors date areas fields subjects
 pf: title^10
 defType: edismax
 ```
-`http://localhost:8983/solr/#/papers/query?q=new%20approaches&q.op=AND&defType=dismax&indent=true&qf=link%20summary%20title%5E2%20authors%20date%20areas%20fields%20subjects&rows=50&pf=title%5E10`
+`http://localhost:8983/solr/#/papers/query?q=areas:(statistics)%20new%20approaches%20linguistics&q.op=AND&defType=dismax&indent=true&qf=link%20summary%20title%5E2%20authors%20date%20areas%20fields%20subjects&rows=50&pf=title%5E10`
 ``
 
 ### 5.
@@ -110,16 +110,3 @@ defType: edismax
 ```
 `http://localhost:8983/solr/#/papers/query?q=subjects:(Artificial%20Intelligence)%20economics&q.op=AND&defType=dismax&indent=true&qf=link%20summary%20title%5E10%20authors%20date%20areas%20fields%20subjects&rows=50&fq=date:%5B2017-01-01T00:00:00Z%20TO%202018-01-01T00:00:00Z%7D`
 ``
-
-### example.
-
-A Student who wants to learn about black holes
-
-Query:
-```
-q: black holes
-qf: link summary title authors date area field subjects
-defType: edismax
-```
-
-`http://localhost:8983/solr/papers/select?defType=edismax&indent=true&q.op=OR&q=black%20hole&qf=link%20summary%20title%20authors%20date%20areas%20fields%20subjects&rows=100`

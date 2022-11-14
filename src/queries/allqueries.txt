@@ -1,5 +1,5 @@
 http://localhost:8983/solr/papers/select?defType=edismax&indent=true&q.op=OR&q=velocity&qf=link%20summary%20title%20authors%20date%20areas%20fields%20subjects&rows=100
 http://localhost:8983/solr/papers/select?defType=dismax&indent=true&q.op=AND&q=normal%20distribution&qf=link%20summary%20title%20authors%20date%20areas%20fields%20subjects&rows=50
 http://localhost:8983/solr/papers/select?defType=dismax&fq=date%3A%5B2014-01-01T00%3A00%3A00Z%20TO%202018-01-01T00%3A00%3A00Z%7D&indent=true&q.op=AND&q=authors%3A(Francis%20Bach)%20algorithm&qf=link%20summary%20title%20authors%20date%20areas%20fields%20subjects&rows=50
-http://localhost:8983/solr/papers/select?defType=dismax&indent=true&q.op=AND&q=new%20approaches&qf=link%20summary%20title%20authors%20date%20areas%20fields%20subjects&rows=50
+http://localhost:8983/solr/papers/select?defType=edismax&indent=true&q.op=AND&q=areas%3A(statistics)%20new%20approaches%20linguistics&qf=link%20summary%20title%20authors%20date%20areas%20fields%20subjects&rows=50
 http://localhost:8983/solr/papers/select?defType=dismax&fq=date%3A%5B2017-01-01T00%3A00%3A00Z%20TO%202018-01-01T00%3A00%3A00Z%7D&indent=true&q.op=AND&q=subjects%3A(Artificial%20Intelligence)%20economics&qf=link%20summary%20title%20authors%20date%20areas%20fields%20subjects&rows=50
