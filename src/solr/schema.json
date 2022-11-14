@@ -62,6 +62,30 @@
     {
         "name": "date",
         "class": "solr.DatePointField"
+    },
+    {
+        "name":"names",
+        "class":"solr.TextField",
+        "indexAnalyzer":{
+            "tokenizer":{
+                "class":"solr.ClassicTokenizerFactory"
+            },
+            "filters":[                
+                {"class":"solr.ClassicFilterFactory"},
+                {"class":"solr.LowerCaseFilterFactory"},
+                {"class":"solr.ASCIIFoldingFilterFactory", "preserveOriginal":true}
+            ]
+        },
+        "queryAnalyzer":{
+            "tokenizer":{
+                "class":"solr.ClassicTokenizerFactory"
+            },
+            "filters":[
+                {"class":"solr.ClassicFilterFactory"},
+                {"class":"solr.LowerCaseFilterFactory"},
+                {"class":"solr.ASCIIFoldingFilterFactory", "preserveOriginal":true}
+            ]
+        }
     }
     ],
     "add-field": [
@@ -80,25 +104,25 @@
         },
         {
             "name": "authors",
-            "type": "text_en",
+            "type": "names",
             "multiValued": true,
             "required": true
         },
         {
             "name": "areas",
-            "type": "text_en",
+            "type": "names",
             "multiValued": true,
             "required": true
         },
         {
             "name": "fields",
-            "type": "text_en",
+            "type": "names",
             "multiValued": true,
             "required": true
         },
         {
             "name": "subjects",
-            "type": "text_en",
+            "type": "names",
             "multiValued": true,
             "required": true
         },
