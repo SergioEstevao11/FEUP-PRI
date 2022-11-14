@@ -4,12 +4,6 @@
         "name":"titleType",
         "class":"solr.TextField",
         "indexAnalyzer":{
-            "charFilter": {
-                "class":"solr.MappingCharFilterFactory", "mapping":"mapping-FoldToASCII.txt"
-            },
-            "tokenizer":{
-                "class":"solr.ClassicTokenizerFactory"
-            },
             "filters":[                
                 {"class":"solr.ClassicFilterFactory"},
                 {"class":"solr.LowerCaseFilterFactory"},

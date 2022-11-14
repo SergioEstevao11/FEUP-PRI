@@ -1,18 +1,13 @@
 {
     "add-field-type": [
     {
-        "name":"summary",
+        "name":"titleType",
         "class":"solr.TextField",
         "indexAnalyzer":{
-            "tokenizer":{
-                "class":"solr.ClassicTokenizerFactory"
-            },
             "filters":[                
                 {"class":"solr.ClassicFilterFactory"},
                 {"class":"solr.LowerCaseFilterFactory"},
                 {"class":"solr.ASCIIFoldingFilterFactory", "preserveOriginal":true},
-                {"class":"solr.EnglishPorterFilterFactory"},
-                {"class":"solr.RemoveDuplicatesTokenFilterFactory"}
             ]
         },
         "queryAnalyzer":{
@@ -22,10 +17,20 @@
             "filters":[
                 {"class":"solr.ClassicFilterFactory"},
                 {"class":"solr.LowerCaseFilterFactory"},
-                {"class":"solr.ASCIIFoldingFilterFactory", "preserveOriginal":true},
-                {"class":"solr.PhoneticFilterFactory", "encoder":"DoubleMetaphone"},
-                {"class":"solr.RemoveDuplicatesTokenFilterFactory"}
             ]
+        }
+    },
+    {
+        "name": "summary",
+        "class": "solr.TextField",
+        "analyzer": {
+          "tokenizer": {
+            "class":"solr.ClassicTokenizerFactory"
+          },
+          "filters": [
+            {"class":"solr.ClassicFilterFactory"},
+            {"class":"solr.ASCIIFoldingFilterFactory", "preserveOriginal":true},
+          ]
         }
     },
     {
@@ -36,14 +41,15 @@
     "add-field": [
         {
             "name": "title",
-            "type": "summary",
-            "indexed": true,
+            "type": "titleType",
+            "stored": true,
             "required": true
         },
         {
             "name": "summary",
             "type": "summary",
             "indexed": true,
+            "stored": true,
             "required": true
         },
         {
@@ -73,11 +79,6 @@
         {
             "name": "date",
             "type": "date",
-            "required": true
-        },
-        {
-            "name": "link",
-            "type": "text_en",
             "required": true
         }
     ]
