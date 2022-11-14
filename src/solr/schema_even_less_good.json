@@ -24,28 +24,6 @@
         }
     },
     {
-        "name": "summary",
-        "class": "solr.TextField",
-        "indexAnalyzer": {
-          "tokenizer": {
-            "class":"solr.ClassicTokenizerFactory"
-          },
-          "filters": [
-            {"class":"solr.ClassicFilterFactory"},
-            {"class":"solr.ASCIIFoldingFilterFactory", "preserveOriginal":true}
-          ]
-        },
-        "queryAnalyzer":{
-            "tokenizer":{
-                "class":"solr.ClassicTokenizerFactory"
-            },
-            "filters":[
-                {"class":"solr.ClassicFilterFactory"},
-                {"class":"solr.LowerCaseFilterFactory"}
-            ]
-        }
-    },
-    {
         "name": "date",
         "class": "solr.DatePointField"
     }
@@ -59,7 +37,7 @@
         },
         {
             "name": "summary",
-            "type": "summary",
+            "type": "text_en",
             "indexed": true,
             "stored": true,
             "required": true
