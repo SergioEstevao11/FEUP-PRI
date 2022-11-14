@@ -4,9 +4,6 @@
         "name":"titleType",
         "class":"solr.TextField",
         "indexAnalyzer":{
-            "charFilter": {
-                "class":"solr.MappingCharFilterFactory", "mapping":"mapping-FoldToASCII.txt"
-            },
             "tokenizer":{
                 "class":"solr.ClassicTokenizerFactory"
             },
@@ -37,7 +34,7 @@
     {
         "name": "summary",
         "class": "solr.TextField",
-        "analyzer": {
+        "indexAnalyzer": {
           "tokenizer": {
             "class":"solr.ClassicTokenizerFactory"
           },
@@ -48,20 +45,6 @@
             {"class": "solr.CommonGramsFilterFactory"},
             {"class": "solr.BeiderMorseFilterFactory", "nameType": "GENERIC", "ruleType": "APPROX", "concat": true, "languageSet": "auto"}
           ]
-        }
-    },
-    {
-        "name":"names",
-        "class":"solr.TextField",
-        "indexAnalyzer":{
-            "tokenizer":{
-                "class":"solr.ClassicTokenizerFactory"
-            },
-            "filters":[                
-                {"class":"solr.ClassicFilterFactory"},
-                {"class":"solr.LowerCaseFilterFactory"},
-                {"class":"solr.ASCIIFoldingFilterFactory", "preserveOriginal":true}
-            ]
         },
         "queryAnalyzer":{
             "tokenizer":{
@@ -70,7 +53,9 @@
             "filters":[
                 {"class":"solr.ClassicFilterFactory"},
                 {"class":"solr.LowerCaseFilterFactory"},
-                {"class":"solr.ASCIIFoldingFilterFactory", "preserveOriginal":true}
+                {"class":"solr.SynonymGraphFilterFactory", "synonyms":"synonyms.txt"},
+                {"class":"solr.PhoneticFilterFactory", "encoder":"DoubleMetaphone"},
+                {"class":"solr.RemoveDuplicatesTokenFilterFactory"}
             ]
         }
     },
@@ -95,25 +80,25 @@
         },
         {
             "name": "authors",
-            "type": "names",
+            "type": "text_en",
             "multiValued": true,
             "required": true
         },
         {
             "name": "areas",
-            "type": "names",
+            "type": "text_en",
             "multiValued": true,
             "required": true
         },
         {
             "name": "fields",
-            "type": "names",
+            "type": "text_en",
             "multiValued": true,
             "required": true
         },
         {
             "name": "subjects",
-            "type": "names",
+            "type": "text_en",
             "multiValued": true,
             "required": true
         },
