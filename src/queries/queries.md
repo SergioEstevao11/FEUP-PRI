@@ -46,7 +46,7 @@ defType: edismax
 
 ### 3.
 
-A Writer wants to writer a biography about Francis Bach, but wants to focus on his algorithmic work from 2008 to 2018 mostly, and preferably from the year of 2015.
+A Writer wants to writer a biography about Francis Bach, but wants to focus on his algorithmic work from 2008 to 2018 mostly, preferably from the year of 2015.
 
 Query:
 ```
