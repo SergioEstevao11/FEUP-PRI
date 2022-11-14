@@ -6,15 +6,15 @@ import numpy as np
 import pandas as pd
 
 #data for query evalution
-BOOSTED = False
+BOOSTED = True
 QUERY_ID = "q4"
 QUERY_URL = "http://localhost:8983/solr/papers/select?defType=dismax&indent=true&q.op=AND&q=new%20approaches&qf=link%20summary%20title%20authors%20date%20areas%20fields%20subjects&rows=50"
 
 def precision(result, relevants, n=10):
     return len(set(result[:n]) & set(relevants)) / n
 
-def recall(result, relevants):
-    return len(set(result) & set(relevants)) / len(relevants)
+def recall(result, relevants, n=10):
+    return len(set(result[:n]) & set(relevants)) / len(relevants)
 
 def f1(result, relevants):
     prec = precision(result, relevants)
@@ -42,64 +42,69 @@ def schema_evalution():
     #MEAN AVERAGE PRECISION
     #MEAN AVERAGE RECALL
     #MEAN AVERAGE F1
-    queries = list(map(lambda el: el.rstrip(), open("queries/allqueries.txt").readlines()))
+    boosted_text = "boosted" if BOOSTED else ""
+
+    queries = list(map(lambda el: el.rstrip(), open("./queries/allqueries" + boosted_text + ".txt").readlines()))
     relevants = [ list(map(lambda el: el.rstrip(), open("./queries/q" + str(id) + "/relevants.txt").readlines())) for id in range(1, len(queries)+1)]
     results = list(map(lambda url: requests.get(url).json()['response']['docs'], queries))
     for i in range(len(results)):
         results[i] = list(map(lambda x: x['id'], results[i]))
 
     precisions = [precision(results[i], relevants[i]) for i in range(len(results))]
-    recalls = [recall(results[i], relevants[i]) for i in range(len(results))]
-    f1s = [f1(results[i], relevants[i]) for i in range(len(results))]
+    recalls = [recall(results[i], relevants[i], len(results[i])+1) for i in range(len(results))]
+    # f1s = [f1(results[i], relevants[i]) for i in range(len(results))]
     print("average precision: ", sum(precisions) / len(precisions))
     print("average recall: ", sum(recalls) / len(recalls))
-    print("average f1: ", sum(f1s) / len(f1s))
+    # print("average f1: ", sum(f1s) / len(f1s))
 
 
     X_axis = np.arange(len(queries))
 
-    plt.bar(X_axis - 0.2, precisions, 0.4, label = 'Precision')
+
+    plt.bar(X_axis - 0.2, precisions, 0.4, label = 'Precision@10')
     plt.bar(X_axis + 0.2, recalls, 0.4, label = 'Recall')
     
-    plt.xticks(X_axis, map(lambda x: "q" + str(x), range(len(queries))))
+    plt.xticks(X_axis, map(lambda x: "q" + str(x+1), range(len(queries))))
     plt.xlabel("Queries")
     plt.title("Precision and Recall for each query")
     plt.legend()
-    plt.savefig("./queries/allqueries.pdf")
+    plt.savefig("./queries/allqueries" + boosted_text + ".pdf")
 
     precision_recall_match = []
     for j in range(len(queries)):
-        precision_values = [precision(results[j], relevants[j][:i]) for i in range(1, len(relevants) + 1)]
-        recall_values = [recall(results[j], relevants[j][:i]) for i in range(1, len(relevants) + 1)]
+        # precision_values = [precision(results[j], relevants[j], i) for i in range(1, len(results[j]) + 1)]
+        # recall_values = [recall(results[j], relevants[j], i) for i in range(1, len(results[j]) + 1)]
+        precision_values = [precision(results[j], relevants[j], i) for i in range(1, 51)]
+        recall_values = [recall(results[j], relevants[j], i) for i in range(1, 51)]
         precision_recall_match.append( {k: v for k,v in zip(recall_values, precision_values)})
         print("og_recall: ", recall_values)
+        print("og_precision: ", precision_values)
 
-        # Extend recall_values to include traditional steps for a better curve (0.1, 0.2 ...)
-        recall_values.extend([step for step in np.arange(0.1, 1.1, 0.1) if step not in recall_values])
-        recall_values = sorted(set(recall_values))
+        # #Extend recall_values to include traditional steps for a better curve (0.1, 0.2 ...)
+        # recall_values.extend([step for step in np.arange(0.1, 1.1, 0.1) if step not in recall_values])
+        # recall_values = sorted(set(recall_values))
 
-        # Extend matching dict to include these new intermediate steps
-        for idx, step in enumerate(recall_values):
-            if step not in precision_recall_match[j]:
-                if recall_values[idx-1] in precision_recall_match[j]:
-                    precision_recall_match[j][step] = precision_recall_match[j][recall_values[idx-1]]
-                else:
-                    precision_recall_match[j][step] = precision_recall_match[j][recall_values[idx+1]]
+        # # Extend matching dict to include these new intermediate steps
+        # for idx, step in enumerate(recall_values):
+        #     if step not in precision_recall_match[j]:
+        #         if recall_values[idx-1] in precision_recall_match[j]:
+        #             precision_recall_match[j][step] = precision_recall_match[j][recall_values[idx-1]]
+        #         else:
+        #             precision_recall_match[j][step] = precision_recall_match[j][recall_values[idx+1]]
         
 
     frst = precision_recall_match[0]
     df = pd.DataFrame.from_dict(frst, orient='index')
     df.columns = ["precision"]
     df["recall"] = df.index
-    print("df: \n", df)
     ax = \
     df.plot.line(x='recall', y='precision', markersize=3, style='-o', label="Q1", figsize=(9, 6))
-
+    styles = ['-v', '-s', '-^', '-<', '-p', '-*', '-h', '-H', '-+', '-x', '-D', '-d', '-|', '-_', '-.']
     for idx in range(1, len(precision_recall_match)):
         df = pd.DataFrame.from_dict(precision_recall_match[idx], orient='index')
         df.columns = ["precision"]
         df["recall"] = df.index
-        df.plot.line(x='recall', y='precision', markersize=3, style='-o', label="Q"+str(idx+1), ax=ax)
+        df.plot.line(x='recall', y='precision', markersize=3, style=styles[idx], label="Q"+str(idx+1), ax=ax)
 
 
     plt.title("Recall-precision graphs")
@@ -109,7 +114,9 @@ def schema_evalution():
     plt.ylim([-0.05, 1.05])
     plt.grid()
     plt.legend(loc="lower right", ncol=7)
-    plt.savefig('./queries/all-recall-precision.pdf', bbox_inches='tight')
+    plt.savefig('./queries/all-recall-precision' + boosted_text +'.pdf', bbox_inches='tight')
+
+
 
 def query_evalution():
     result = requests.get(QUERY_URL).json()['response']['docs']
@@ -146,20 +153,20 @@ def query_evalution():
 
 
 def main():
-    #schema_evalution()
+    schema_evalution()
     #query_evalution()
 
     #simple query evaluation
-    result = requests.get(QUERY_URL).json()['response']['docs']
-    result = list(map(lambda x: x['id'], result))
-    relevants = list(map(lambda el: el.rstrip(), open("./queries/" + QUERY_ID + "/relevants.txt").readlines()))
+    # result = requests.get(QUERY_URL).json()['response']['docs']
+    # result = list(map(lambda x: x['id'], result))
+    # relevants = list(map(lambda el: el.rstrip(), open("./queries/" + QUERY_ID + "/relevants.txt").readlines()))
 
-    p = precision(result, relevants)
-    r = recall(result, relevants)
+    # p = precision(result, relevants)
+    # r = recall(result, relevants)
     # f = f1(result, relevants)
 
-    print("precision: ", p)
-    print("recall: ", r)
+    # print("precision: ", p)
+    # print("recall: ", r)
     # print("f1: ", f)
 
 
