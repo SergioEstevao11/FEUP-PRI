@@ -4,6 +4,9 @@
         "name":"titleType",
         "class":"solr.TextField",
         "indexAnalyzer":{
+            "charFilter": {
+                "class":"solr.MappingCharFilterFactory", "mapping":"mapping-FoldToASCII.txt"
+            },
             "tokenizer":{
                 "class":"solr.ClassicTokenizerFactory"
             },
@@ -34,7 +37,7 @@
     {
         "name": "summary",
         "class": "solr.TextField",
-        "indexAnalyzer": {
+        "analyzer": {
           "tokenizer": {
             "class":"solr.ClassicTokenizerFactory"
           },
@@ -45,23 +48,7 @@
             {"class": "solr.CommonGramsFilterFactory"},
             {"class": "solr.BeiderMorseFilterFactory", "nameType": "GENERIC", "ruleType": "APPROX", "concat": true, "languageSet": "auto"}
           ]
-        },
-        "queryAnalyzer":{
-            "tokenizer":{
-                "class":"solr.ClassicTokenizerFactory"
-            },
-            "filters":[
-                {"class":"solr.ClassicFilterFactory"},
-                {"class":"solr.LowerCaseFilterFactory"},
-                {"class":"solr.SynonymGraphFilterFactory", "synonyms":"synonyms.txt"},
-                {"class":"solr.PhoneticFilterFactory", "encoder":"DoubleMetaphone"},
-                {"class":"solr.RemoveDuplicatesTokenFilterFactory"}
-            ]
         }
-    },
-    {
-        "name": "date",
-        "class": "solr.DatePointField"
     },
     {
         "name":"names",
@@ -86,6 +73,10 @@
                 {"class":"solr.ASCIIFoldingFilterFactory", "preserveOriginal":true}
             ]
         }
+    },
+    {
+        "name": "date",
+        "class": "solr.DatePointField"
     }
     ],
     "add-field": [

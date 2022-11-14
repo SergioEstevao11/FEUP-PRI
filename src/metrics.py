@@ -6,9 +6,9 @@ import numpy as np
 import pandas as pd
 
 #data for query evalution
-BOOSTED = True
-QUERY_ID = "q4"
-QUERY_URL = "http://localhost:8983/solr/papers/select?defType=dismax&indent=true&q.op=AND&q=new%20approaches&qf=link%20summary%20title%20authors%20date%20areas%20fields%20subjects&rows=50"
+BOOSTED = False
+QUERY_ID = "q1"
+QUERY_URL = "http://localhost:8983/solr/papers/select?defType=edismax&indent=true&q.op=OR&q=velocity&qf=link%20summary%20title%20authors%20date%20areas%20fields%20subjects&rows=100"
 
 def precision(result, relevants, n=10):
     return len(set(result[:n]) & set(relevants)) / n
@@ -52,6 +52,8 @@ def schema_evalution():
 
     precisions = [precision(results[i], relevants[i]) for i in range(len(results))]
     recalls = [recall(results[i], relevants[i], len(results[i])+1) for i in range(len(results))]
+    print("precisions: ", precisions)
+    print("recalls: ", recalls)
     # f1s = [f1(results[i], relevants[i]) for i in range(len(results))]
     print("average precision: ", sum(precisions) / len(precisions))
     print("average recall: ", sum(recalls) / len(recalls))
@@ -77,8 +79,8 @@ def schema_evalution():
         precision_values = [precision(results[j], relevants[j], i) for i in range(1, 51)]
         recall_values = [recall(results[j], relevants[j], i) for i in range(1, 51)]
         precision_recall_match.append( {k: v for k,v in zip(recall_values, precision_values)})
-        print("og_recall: ", recall_values)
-        print("og_precision: ", precision_values)
+        # print("og_recall: ", recall_values)
+        # print("og_precision: ", precision_values)
 
         # #Extend recall_values to include traditional steps for a better curve (0.1, 0.2 ...)
         # recall_values.extend([step for step in np.arange(0.1, 1.1, 0.1) if step not in recall_values])
@@ -123,31 +125,31 @@ def query_evalution():
     result = list(map(lambda x: x['id'], result))
     relevants = list(map(lambda el: el.rstrip(), open("./queries/" + QUERY_ID + "/relevants.txt").readlines()))
     
-    precision_values = [precision(result, relevants[:i]) for i in range(1, len(relevants) + 1)]
-    recall_values = [recall(result, relevants[:i]) for i in range(1, len(relevants) + 1)]
-    f1_values = [f1(result, relevants[:i]) for i in range(1, len(relevants) + 1)]
+    precision_values = [precision(result, relevants, i) for i in range(1, 51)]
+    recall_values = [recall(result, relevants, i) for i in range(1, 51)]
+    # f1_values = [f1(result, relevants[:i]) for i in range(1, len(relevants) + 1)]
 
     precision_recall_match = {k: v for k,v in zip(recall_values, precision_values)}
 
     print("og_recall: ", recall_values)
 
-    # Extend recall_values to include traditional steps for a better curve (0.1, 0.2 ...)
-    recall_values.extend([step for step in np.arange(0.1, 1.1, 0.1) if step not in recall_values])
-    recall_values = sorted(set(recall_values))
+    # # Extend recall_values to include traditional steps for a better curve (0.1, 0.2 ...)
+    # recall_values.extend([step for step in np.arange(0.1, 1.1, 0.1) if step not in recall_values])
+    # recall_values = sorted(set(recall_values))
 
-    # Extend matching dict to include these new intermediate steps
-    for idx, step in enumerate(recall_values):
-        if step not in precision_recall_match:
-            if recall_values[idx-1] in precision_recall_match:
-                precision_recall_match[step] = precision_recall_match[recall_values[idx-1]]
-            else:
-                precision_recall_match[step] = precision_recall_match[recall_values[idx+1]]
+    # # Extend matching dict to include these new intermediate steps
+    # for idx, step in enumerate(recall_values):
+    #     if step not in precision_recall_match:
+    #         if recall_values[idx-1] in precision_recall_match:
+    #             precision_recall_match[step] = precision_recall_match[recall_values[idx-1]]
+    #         else:
+    #             precision_recall_match[step] = precision_recall_match[recall_values[idx+1]]
     
     print("precision_recall_match", precision_recall_match)
 
     print("precision values: ", precision_values)
     print("recall values: ", recall_values)
-    print("f1 values: ", f1_values)
+    # print("f1 values: ", f1_values)
 
     plot_precision_recall_curve([precision_recall_match.get(r) for r in recall_values], recall_values, title="Precision-Recall curve")
 
