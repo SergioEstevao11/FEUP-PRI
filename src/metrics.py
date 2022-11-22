@@ -6,9 +6,9 @@ import numpy as np
 import pandas as pd
 
 #data for query evalution
-BOOSTED = True
-QUERY_ID = "q5"
-QUERY_URL = "http://localhost:8983/solr/papers/select?defType=dismax&fq=date%3A%5B2017-01-01T00%3A00%3A00Z%20TO%202018-01-01T00%3A00%3A00Z%7D&indent=true&q.op=AND&q=computer%20science%20economics&qf=link%20summary%20title%20authors%20date%20areas%5E5%20fields%5E5%20subjects%5E5&rows=50"
+BOOSTED = False
+QUERY_ID = "q4"
+QUERY_URL = "http://localhost:8983/solr/papers/select?defType=edismax&indent=true&q.op=AND&q=areas%3A(statistics)%20new%20approaches%20linguistics&qf=link%20summary%20title%20authors%20date%20areas%20fields%20subjects&rows=50"
 
 def precision(result, relevants, n=10):
     return len(set(result[:n]) & set(relevants)) / n
@@ -23,7 +23,7 @@ def f1(result, relevants):
 
 def plot_precision_recall_curve(precision, recall, title):
     disp = PrecisionRecallDisplay(precision=precision, recall=recall)
-    disp.plot(ax=plt.gca(), label="Precision-Recall curve")
+    disp.plot(ax=None, label="Precision-Recall curve", x)
     plt.xlabel("Recall")
     plt.ylabel("Precision")
     plt.title(title)
@@ -61,6 +61,8 @@ def schema_evalution():
 
 
     X_axis = np.arange(len(queries))
+
+
 
 
     plt.bar(X_axis - 0.2, precisions, 0.4, label = 'Precision@10')
