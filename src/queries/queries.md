@@ -60,7 +60,7 @@ Boosted:
 ```
 q: Francis Bach algorithm
 qf: link summary^5 title authors^5 date areas fields subjects
-bf: if(and(gte(ms(date),ms(2015-01-01T00:00:00Z)),lt(ms(date),ms(2016-01-01T00:00:00Z))),10,0.1)
+bf: if(and(gte(ms(date),ms(2015-01-01T00:00:00Z)),lt(ms(date),ms(2016-01-01T00:00:00Z))),20,0.1)
 defType: edismax
 ```
 `http://localhost:8983/solr/#/papers/query?q=Francis%20Bach%20algorithm&q.op=AND&defType=dismax&indent=true&qf=link%20summary%5E5%20title%20authors%5E10%20date%20areas%20fields%20subjects&rows=50&bf=if(and(gte(ms(date),ms(2015-01-01T00:00:00Z)),lt(ms(date),ms(2016-01-01T00:00:00Z))),10,0.1)&fq=date:%5B2008-01-01T00:00:00Z%20TO%202018-01-01T00:00:00Z%7D`
@@ -74,7 +74,7 @@ Query:
 ```
 q: areas:(statistics) new approaches linguistics
 qf: link summary title authors date areas fields subjects
-defType: edismax
+defType: edismaxza
 ```
 `http://localhost:8983/solr/#/papers/query?q=areas:(statistics)%20new%20approaches%20linguistics&q.op=AND&defType=edismax&indent=true&qf=link%20summary%20title%20authors%20date%20areas%20fields%20subjects&rows=50`
 
