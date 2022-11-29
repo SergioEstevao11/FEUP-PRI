@@ -6,9 +6,9 @@ import numpy as np
 import pandas as pd
 
 #data for query evalution
-BOOSTED = False
-QUERY_ID = "q4"
-QUERY_URL = "http://localhost:8983/solr/papers/select?defType=edismax&indent=true&q.op=AND&q=areas%3A(statistics)%20new%20approaches%20linguistics&qf=link%20summary%20title%20authors%20date%20areas%20fields%20subjects&rows=50"
+BOOSTED = True
+QUERY_ID = "q5"
+QUERY_URL = "http://localhost:8983/solr/papers/select?defType=dismax&fq=date%3A%5B2017-01-01T00%3A00%3A00Z%20TO%202018-01-01T00%3A00%3A00Z%7D&indent=true&q.op=AND&q=computer%20science%20economics&qf=link%20summary%20title%20authors%20date%20areas%5E5%20fields%5E5%20subjects%5E5&rows=50"
 
 def precision(result, relevants, n=10):
     return len(set(result[:n]) & set(relevants)) / n
@@ -23,7 +23,7 @@ def f1(result, relevants):
 
 def plot_precision_recall_curve(precision, recall, title):
     disp = PrecisionRecallDisplay(precision=precision, recall=recall)
-    disp.plot(ax=None, label="Precision-Recall curve", x)
+    disp.plot(ax=None, label="Precision-Recall curve")
     plt.xlabel("Recall")
     plt.ylabel("Precision")
     plt.title(title)
@@ -36,7 +36,7 @@ def plot_precision_recall_curve_from_df(df, title):
     precision = df["precision"].to_numpy()
     recall = df["recall"].to_numpy()
     average_precision = df["average_precision"].to_numpy()
-    plot_precision_recall_curve(precision, recall, average_precision, title)
+    plot_precision_recall_curve(precision, recall, title)
 
 def schema_evalution():
     #MEAN AVERAGE PRECISION
@@ -151,9 +151,17 @@ def query_evalution():
 
     print("precision values: ", precision_values)
     print("recall values: ", recall_values)
-    # print("f1 values: ", f1_values)
+    
+    precisions_for_plot = [precision_recall_match.get(r) for r in recall_values]
 
-    plot_precision_recall_curve([precision_recall_match.get(r) for r in recall_values], recall_values, title="Precision-Recall curve")
+    #interpolation
+    i = len(precisions_for_plot)-2
+    while i>=0:
+        if precisions_for_plot[i+1]>precisions_for_plot[i]:
+            precisions_for_plot[i]=precisions_for_plot[i+1]
+        i=i-1
+
+    plot_precision_recall_curve(precisions_for_plot, recall_values, title="Precision-Recall curve")
 
 
 def main():
