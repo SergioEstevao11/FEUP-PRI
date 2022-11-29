@@ -6,9 +6,9 @@ import numpy as np
 import pandas as pd
 
 #data for query evalution
-BOOSTED = True
-QUERY_ID = "q5"
-QUERY_URL = "http://localhost:8983/solr/papers/select?defType=dismax&fq=date%3A%5B2017-01-01T00%3A00%3A00Z%20TO%202018-01-01T00%3A00%3A00Z%7D&indent=true&q.op=AND&q=computer%20science%20economics&qf=link%20summary%20title%20authors%20date%20areas%5E5%20fields%5E5%20subjects%5E5&rows=50"
+BOOSTED = False
+QUERY_ID = "q4"
+QUERY_URL = "http://localhost:8983/solr/papers/select?defType=edismax&indent=true&q.op=AND&q=areas%3A(statistics)%20new%20approaches%20linguistics&qf=link%20summary%20title%20authors%20date%20areas%20fields%20subjects&rows=50"
 
 def precision(result, relevants, n=10):
     return len(set(result[:n]) & set(relevants)) / n
@@ -79,6 +79,14 @@ def schema_evalution():
         # precision_values = [precision(results[j], relevants[j], i) for i in range(1, len(results[j]) + 1)]
         # recall_values = [recall(results[j], relevants[j], i) for i in range(1, len(results[j]) + 1)]
         precision_values = [precision(results[j], relevants[j], i) for i in range(1, 51)]
+
+        #interpolate
+        i = len(precision_values)-2
+        while i>=0:
+            if precision_values[i+1]>precision_values[i]:
+                precision_values[i]=precision_values[i+1]
+            i=i-1
+
         recall_values = [recall(results[j], relevants[j], i) for i in range(1, 51)]
         precision_recall_match.append( {k: v for k,v in zip(recall_values, precision_values)})
         # print("og_recall: ", recall_values)
@@ -111,14 +119,14 @@ def schema_evalution():
         df.plot.line(x='recall', y='precision', markersize=3, style=styles[idx], label="Q"+str(idx+1), ax=ax)
 
 
-    plt.title("Recall-precision graphs")
+    plt.title("Precision-recall graphs")
     plt.xlabel("Recall (R@n)")
     plt.ylabel("Precision (P@n)")
     plt.xlim([-0.05, 1.05])
     plt.ylim([-0.05, 1.05])
     plt.grid()
     plt.legend(loc="lower right", ncol=7)
-    plt.savefig('./queries/all-recall-precision' + boosted_text +'.pdf', bbox_inches='tight')
+    plt.savefig('./queries/all-precision-recall' + boosted_text +'.pdf', bbox_inches='tight')
 
 
 
@@ -165,8 +173,8 @@ def query_evalution():
 
 
 def main():
-    #schema_evalution()
-    query_evalution()
+    schema_evalution()
+    #query_evalution()
 
     #simple query evaluation
     # result = requests.get(QUERY_URL).json()['response']['docs']
