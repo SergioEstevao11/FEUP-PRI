@@ -1,7 +1,9 @@
 import logo from './logo.svg';
 import './App.css';
-import Alert from 'react-bootstrap/Alert';
+// import Alert from 'react-bootstrap/Alert';
 
+
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
   return (
@@ -16,11 +18,11 @@ function App() {
         'light',
         'dark',
       ].map((variant) => (
-        <Alert key={variant} variant={variant}>
+        <div className={`d-flex align-content-center justify-content-center alert alert-${variant}`} key={variant}>
           This is a {variant} alert with{' '}
-          <Alert.Link href="#">an example link</Alert.Link>. Give it a click if
+          <div><a href="#">an example link</a></div>Give it a click if
           you like.
-        </Alert>
+        </div>
       ))}
     </>
   );
