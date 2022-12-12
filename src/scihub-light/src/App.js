@@ -1,86 +1,34 @@
 import './App.css';
 // import Alert from 'react-bootstrap/Alert';
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Select from "react-select";
 import TextField from '@mui/material/TextField';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import tags from './fixtures/tags.json';
+
 
 
 function App() {
   const [selectedAreas, setSelectedAreas] = useState();
   const [selectedFields, setSelectedFields] = useState();
   const [selectedSubjects, setSelectedSubjects] = useState();
-  const [value, setValue] = React.useState(Date.now());
-
+  const [oldestDate, setOldestDate] = React.useState(Date.parse("1993-01-01"));
+  const [recentDate, setRecentDate] = React.useState(Date.now());
 
   // Array of all options
-  const AreasList = [
-    { value: "red", label: "Red" },
-    { value: "green", label: "Green" },
-    { value: "yellow", label: "Yellow" },
-    { value: "blue", label: "Blue" },
-    { value: "white", label: "White" },
-    { value: "black", label: "Black" },
-    { value: "orange", label: "Orange" },
-    { value: "purple", label: "Purple" },
-    { value: "brown", label: "Brown" },
-    { value: "grey", label: "Grey" },
-    { value: "pink", label: "Pink" },
-    { value: "silver", label: "Silver" },
-    { value: "gold", label: "Gold" },
-    { value: "beige", label: "Beige" },
-    { value: "maroon", label: "Maroon" },
-    { value: "navy", label: "Navy" },
-    { value: "olive", label: "Olive" },
-    { value: "teal", label: "Teal" }
+  var AreasList = tags.areas.map((area) => {
+    return { value: area, label: area };
+  });
 
-  ];
+  var FieldsList = FieldsList = tags.fields.map((field) => {
+    return { value: field, label: field };
+  });
 
-  const FieldsList = [
-    { value: "red", label: "Red" },
-    { value: "green", label: "Green" },
-    { value: "yellow", label: "Yellow" },
-    { value: "blue", label: "Blue" },
-    { value: "white", label: "White" },
-    { value: "black", label: "Black" },
-    { value: "orange", label: "Orange" },
-    { value: "purple", label: "Purple" },
-    { value: "brown", label: "Brown" },
-    { value: "grey", label: "Grey" },
-    { value: "pink", label: "Pink" },
-    { value: "silver", label: "Silver" },
-    { value: "gold", label: "Gold" },
-    { value: "beige", label: "Beige" },
-    { value: "maroon", label: "Maroon" },
-    { value: "navy", label: "Navy" },
-    { value: "olive", label: "Olive" },
-    { value: "teal", label: "Teal" }
-
-  ];
-
-  const SubjectsList = [
-    { value: "red", label: "Red" },
-    { value: "green", label: "Green" },
-    { value: "yellow", label: "Yellow" },
-    { value: "blue", label: "Blue" },
-    { value: "white", label: "White" },
-    { value: "black", label: "Black" },
-    { value: "orange", label: "Orange" },
-    { value: "purple", label: "Purple" },
-    { value: "brown", label: "Brown" },
-    { value: "grey", label: "Grey" },
-    { value: "pink", label: "Pink" },
-    { value: "silver", label: "Silver" },
-    { value: "gold", label: "Gold" },
-    { value: "beige", label: "Beige" },
-    { value: "maroon", label: "Maroon" },
-    { value: "navy", label: "Navy" },
-    { value: "olive", label: "Olive" },
-    { value: "teal", label: "Teal" }
-
-  ];
+  var SubjectsList = tags.subjects.map((subject) => {
+    return { value: subject, label: subject };
+  });
 
   // Function triggered on selection
   function handleSelectArea(data) {
@@ -96,12 +44,11 @@ function App() {
   }
 
   function showFilters() {
-    if (document.getElementById("filters").style.display === "none")
-      document.getElementById("filters").style.display = "block";
+    if (document.getElementById("filters").style.visibility === "hidden")
+      document.getElementById("filters").style.visibility = "visible";
     else
-      document.getElementById("filters").style.display = "none";
+      document.getElementById("filters").style.visibility = "hidden";
     
-    console.log("here")
   }
 
 
@@ -126,9 +73,9 @@ function App() {
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
                       label="Basic example"
-                      value={value}
-                      onChange={(newValue) => {
-                        setValue(newValue);
+                      value={oldestDate}
+                      onChange={(oldestDate) => {
+                        setOldestDate(oldestDate);
                       }}
                       renderInput={(params) => <TextField {...params} />}
                     />
@@ -138,9 +85,9 @@ function App() {
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
                       label="Basic example"
-                      value={value}
-                      onChange={(newValue) => {
-                        setValue(newValue);
+                      value={recentDate}
+                      onChange={(recentDate) => {
+                        setRecentDate(recentDate);
                       }}
                       renderInput={(params) => <TextField {...params} />}
                     />
