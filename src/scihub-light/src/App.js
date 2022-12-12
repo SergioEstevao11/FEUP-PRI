@@ -1,10 +1,110 @@
 import './App.css';
 // import Alert from 'react-bootstrap/Alert';
-
-
+import React, { useState } from "react";
+import Select from "react-select";
+import TextField from '@mui/material/TextField';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 
 function App() {
+  const [selectedAreas, setSelectedAreas] = useState();
+  const [selectedFields, setSelectedFields] = useState();
+  const [selectedSubjects, setSelectedSubjects] = useState();
+  const [value, setValue] = React.useState(Date.now());
+
+
+  // Array of all options
+  const AreasList = [
+    { value: "red", label: "Red" },
+    { value: "green", label: "Green" },
+    { value: "yellow", label: "Yellow" },
+    { value: "blue", label: "Blue" },
+    { value: "white", label: "White" },
+    { value: "black", label: "Black" },
+    { value: "orange", label: "Orange" },
+    { value: "purple", label: "Purple" },
+    { value: "brown", label: "Brown" },
+    { value: "grey", label: "Grey" },
+    { value: "pink", label: "Pink" },
+    { value: "silver", label: "Silver" },
+    { value: "gold", label: "Gold" },
+    { value: "beige", label: "Beige" },
+    { value: "maroon", label: "Maroon" },
+    { value: "navy", label: "Navy" },
+    { value: "olive", label: "Olive" },
+    { value: "teal", label: "Teal" }
+
+  ];
+
+  const FieldsList = [
+    { value: "red", label: "Red" },
+    { value: "green", label: "Green" },
+    { value: "yellow", label: "Yellow" },
+    { value: "blue", label: "Blue" },
+    { value: "white", label: "White" },
+    { value: "black", label: "Black" },
+    { value: "orange", label: "Orange" },
+    { value: "purple", label: "Purple" },
+    { value: "brown", label: "Brown" },
+    { value: "grey", label: "Grey" },
+    { value: "pink", label: "Pink" },
+    { value: "silver", label: "Silver" },
+    { value: "gold", label: "Gold" },
+    { value: "beige", label: "Beige" },
+    { value: "maroon", label: "Maroon" },
+    { value: "navy", label: "Navy" },
+    { value: "olive", label: "Olive" },
+    { value: "teal", label: "Teal" }
+
+  ];
+
+  const SubjectsList = [
+    { value: "red", label: "Red" },
+    { value: "green", label: "Green" },
+    { value: "yellow", label: "Yellow" },
+    { value: "blue", label: "Blue" },
+    { value: "white", label: "White" },
+    { value: "black", label: "Black" },
+    { value: "orange", label: "Orange" },
+    { value: "purple", label: "Purple" },
+    { value: "brown", label: "Brown" },
+    { value: "grey", label: "Grey" },
+    { value: "pink", label: "Pink" },
+    { value: "silver", label: "Silver" },
+    { value: "gold", label: "Gold" },
+    { value: "beige", label: "Beige" },
+    { value: "maroon", label: "Maroon" },
+    { value: "navy", label: "Navy" },
+    { value: "olive", label: "Olive" },
+    { value: "teal", label: "Teal" }
+
+  ];
+
+  // Function triggered on selection
+  function handleSelectArea(data) {
+    setSelectedAreas(data);
+  }
+
+  function handleSelectField(data) {
+    setSelectedFields(data);
+  }
+
+  function handleSelectSubject(data) {
+    setSelectedSubjects(data);
+  }
+
+  function showFilters() {
+    if (document.getElementById("filters").style.display === "none")
+      document.getElementById("filters").style.display = "block";
+    else
+      document.getElementById("filters").style.display = "none";
+    
+    console.log("here")
+  }
+
+
   return (
     <>
       <div class="d-flex align-items-center justify-content-center" style={{height: 100 + 'vh'}}>
@@ -13,73 +113,78 @@ function App() {
           <h1 class="text-center">SciHub Light</h1>
         </div>
       
-      <div class="container">
-        <div class="input-group py-auto">
-          <input type="search" class="form-control" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
-          <button type="button" class="btn btn-primary">Filters</button>     
-          <button type="button" class="btn btn-outline-primary">Search</button>
-        </div>
-        <div class="form-check mt-5">
         <div class="container">
+          <div class="input-group py-auto">
+            <input type="search" class="form-control" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+            <button type="button" class="btn btn-primary" onClick={showFilters}>Filters</button>     
+            <button type="button" class="btn btn-outline-primary">Search</button>
+          </div>
+          <div class="form mt-3" id="filters">
 
-          <div class="row">
-            <div class="col-4">
-              <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"/>
-              <label class="form-check-label" for="flexCheckDefault">
-                Artificial Intelligence
-              </label>
+            <div class="row">
+              <div class="col-6" style={{paddingLeft: 15 + '%'}}>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DatePicker
+                      label="Basic example"
+                      value={value}
+                      onChange={(newValue) => {
+                        setValue(newValue);
+                      }}
+                      renderInput={(params) => <TextField {...params} />}
+                    />
+                  </LocalizationProvider>
+              </div>
+              <div class="col-6">
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DatePicker
+                      label="Basic example"
+                      value={value}
+                      onChange={(newValue) => {
+                        setValue(newValue);
+                      }}
+                      renderInput={(params) => <TextField {...params} />}
+                    />
+                  </LocalizationProvider>
+                </div>
             </div>
+            <div class="row mt-3">
             <div class="col-4">
-              <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault8"/>
-              <label class="form-check-label" for="flexCheckDefault8">
-                Artificial Intelligence
-              </label>
+                  <Select id="areas"
+                    options={AreasList}
+                    placeholder="Select Areas"
+                    value={selectedAreas}
+                    onChange={handleSelectArea}
+                    isSearchable={true}
+                    isMulti/>
+              </div>
+              <div class="col-4">
+                  <Select id="fields"
+                    options={FieldsList}
+                    placeholder="Select Fields"
+                    value={selectedFields}
+                    onChange={handleSelectField}
+                    isSearchable={true}
+                    isMulti
+                  />
+              </div>
+              <div class="col-4">
+
+                <Select id="subjects"
+                    options={SubjectsList}
+                    placeholder="Select Subjects"
+                    value={selectedSubjects}
+                    onChange={handleSelectSubject}
+                    isSearchable={true}
+                    isMulti
+                  />
+              </div>
             </div>
-            <div class="col-4">
-              <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault9"/>
-              <label class="form-check-label" for="flexCheckDefault9">
-                Artificial Intelligence
-              </label>
-            </div>
-          </div>
-          <div class="">
-          <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault1"/>
-          <label class="form-check-label" for="flexCheckDefault1">
-            Statistics
-          </label>
-          </div>
-          <div class="">
-          <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault2"/>
-          <label class="form-check-label" for="flexCheckDefault2">
-            Machine Learning
-          </label>
-          </div>
-          <div class="">
-
-          <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault3"/>
-          <label class="form-check-label" for="flexCheckDefault3">
-            Mathematics
-          </label>
-          </div>
-          <div class="">
-
-          <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault4"/>
-          <label class="form-check-label" for="flexCheckDefault4">
-            Physics
-          </label>
-          </div>
-          <div class="">
-
-          <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault5"/>
-          <label class="form-check-label" for="flexCheckDefault5">
-            Chemistry
-          </label>
-          </div>
+       
           </div>
         </div>
       </div>
       </div>
-      </div>
+     
     </>
   );
 }
