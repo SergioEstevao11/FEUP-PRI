@@ -1,5 +1,5 @@
 import '../App.css';
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Select from "react-select";
 import TextField from '@mui/material/TextField';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -12,7 +12,7 @@ import Axios  from 'axios';
 
 
 
-export default function SearchBar({setResults}) {
+export default function SearchBar({setResults, orderChanged, setOrderChanged}) {
   const [selectedAreas, setSelectedAreas] = useState();
   const [selectedFields, setSelectedFields] = useState();
   const [selectedSubjects, setSelectedSubjects] = useState();
@@ -20,6 +20,12 @@ export default function SearchBar({setResults}) {
   const [recentDate, setRecentDate] = React.useState(Date.now());
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (orderChanged){
+      search();
+    }
+  }, []);
 
   // Array of all options
   var AreasList = tags.areas.map((area) => {
@@ -56,6 +62,7 @@ export default function SearchBar({setResults}) {
   }
 
   function search(){
+
     let areas = [];
     let fields = [];
     let subjects = [];
@@ -69,6 +76,7 @@ export default function SearchBar({setResults}) {
 
     
     let search = document.getElementById("query_search").value;
+    let sortType = document.getElementById("orderBySelect").value;
     let ld = new Date(oldestDate);
     let rd = new Date(recentDate);
     let leftDate = ld.getFullYear() + "-" + (ld.getMonth() + 1) + "-" + ld.getDate() + "T00:00:00Z";
@@ -76,7 +84,7 @@ export default function SearchBar({setResults}) {
 
     let queryData = {
       query: search,
-      sort: "Relevance",
+      sort: sortType,
       areas: JSON.stringify({areas: areas}),
       fields: JSON.stringify({fields: fields}),
       subjects: JSON.stringify({subjects: subjects}),
@@ -107,6 +115,16 @@ export default function SearchBar({setResults}) {
           
         }
         
+      }
+
+      setOrderChanged(false);
+
+      if (data.papers.length > 0){
+        document.getElementById("orderBySelect").style.visibility = "visible";
+        document.getElementById("moreLikeThisBtn").style.visibility = "visible";
+      }else{
+        document.getElementById("orderBySelect").style.visibility = "hidden";
+        document.getElementById("moreLikeThisBtn").style.visibility = "hidden";
       }
 
       console.log(data)

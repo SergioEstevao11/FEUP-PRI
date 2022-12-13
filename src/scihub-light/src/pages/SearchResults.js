@@ -1,6 +1,6 @@
 import '../App.css';
 // import Alert from 'react-bootstrap/Alert';
-import React from "react";
+import React, { useEffect } from "react";
 import SearchBar from '../components/SearchBar';
 import ArticleCard from '../components/ArticleCard';
 import arxiv_logo from '../assets/arxiv_logo.png';
@@ -10,14 +10,39 @@ import Axios  from 'axios';
 export default function SearchResult() {
 
     const [results, setResults] = React.useState({papers: {}});
+    const [orderChanged, setOrderChanged] = React.useState(false);
 
-    function moreLikeThis(){
+    useEffect(() => {}, [results, orderChanged]);
+
+    async function moreLikeThis(){
         console.log("moreLikeThis")
-        Axios.get("http://localhost:3001/moreLikeThis/34768").then((response) => {
-            console.log(response);
-            }).catch((error) => {
-            console.log(error);
-            });
+        const collection = document.getElementsByClassName("result_checkbox");
+        var mlt_results = {};
+        let first = true;
+        if(collection.length === 0)
+            return;
+        for (let i=0; i < collection.length; i++){
+            if (collection[i].checked){
+                document.getElementById(collection[i].id).checked = false;
+            
+                await Axios.get("http://localhost:3001/moreLikeThis/"+collection[i].id ).then((response) => {
+                    console.log(response);
+                    if (first){
+                        mlt_results = response.data;
+                        first = false;
+                    }
+                    else{
+                        mlt_results.papers = mlt_results.papers.concat(response.data.papers);
+                    }
+                }).catch((error) => {
+                console.log(error);
+                });
+            }
+        }
+        
+        console.log("mlt_results: ", mlt_results)
+        setResults(mlt_results);
+        
     }
 
   return (
@@ -29,19 +54,34 @@ export default function SearchResult() {
         <div class="row">
             <div class="d-flex align-items-center justify-content-center" >
                 <div class="w-50 my-3">
-                <SearchBar setResults={setResults}/>
+                <SearchBar setResults={setResults} orderChanged={orderChanged} setOrderChanged={setOrderChanged}/>
                 </div>
             </div>
         </div>
-        
-        <div class="d-flex align-items-center justify-content-end">
-            <div class="mb-2" style={{marginRight: "11%"}}>
-            <button type="button" class="btn btn-warning" onClick={moreLikeThis}>MoreLikeThis!</button>
+
+        <div class="row">
+            <div class="col-6">
+
+            <div class="d-flex align-items-center justify-content-start">
+                <div class="mb-2" style={{marginLeft: "17.2%"}}>
+                <select class="form-select" aria-label="Default select example" id="orderBySelect" style={{visibility:"hidden"}} onChange={setOrderChanged(true)}>
+                    <option selected value="Relevance">Relevance</option>
+                    <option value="date asc">Date Ascending</option>
+                    <option value="date desc">Date Descending</option>
+                </select>
+                </div>
+            </div>
+            </div>
+            <div class="col-6">
+                <div class="d-flex align-items-center justify-content-end">
+                    <div class="mb-2" style={{marginRight: "25.5%"}}>
+                    <button type="button" id="moreLikeThisBtn" class="btn btn-warning" onClick={moreLikeThis} style={{visibility:"hidden"}}>MoreLike...</button>
+                    </div>
+                </div>
             </div>
         </div>
       
         <div class="row justify-content-around">
-            {/* { results.data.papers.map(paper => <div class="col-10"> <ArticleCard data={paper} /> </div>) } */}
             {Object.entries(results.papers).map(([key, value]) =>  <div class="col-10"> <ArticleCard data={value}/> </div>)}
         </div>
      

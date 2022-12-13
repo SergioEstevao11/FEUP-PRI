@@ -40,8 +40,8 @@ export default function ArticleCard({data}) {
 
       <Card variant="outlined">
         <div class="d-flex" style={{marginLeft: "90%"}}>
-            <input type="checkbox" id={data.id}/>
-            <label for={data.id}>Relevant</label>
+            <input type="checkbox" class="result_checkbox" id={data.id}/>
+            <label for={data.id}>This!</label>
         </div>
       {card}
       </Card>
