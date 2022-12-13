@@ -4,7 +4,6 @@ const axios = require('axios');
 const app = express();
 app.use(express.json());
 const PORT = process.env.PORT || 3001;
-app.listen(8080);
 
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -49,6 +48,7 @@ app.get('/paper/:id', async (req, res) => {
 
 app.get('/moreLikeThis/:id', async (req, res) => {
   // Request Parameters
+  console.log("MoreLikeThis")
   const id = req.params.id; // dates asc desc by relevance
 
   // General Parameters
@@ -76,6 +76,8 @@ app.get('/moreLikeThis/:id', async (req, res) => {
     pages: Math.ceil(response.data.response.numFound / 10),
   };
 
+  console.log(reply)
+
   res.status(200).json(reply);
 });
 
@@ -84,12 +86,12 @@ app.get('/search', async (req, res) => {
   // Request Parameters
   const sort = req.query.sort ? req.query.sort : null; // dates asc desc by relevance
   const page = req.query.page ? req.query.page - 1 : 0; // page number
-  const areas = req.query.areas ? JSON.parse(req.query.areas).area : []; // areas, fields, subjects, date
-  const fields = req.query.fields ? JSON.parse(req.query.fields) : [];
-  const subjects = req.query.subjects ? JSON.parse(req.query.subjects) : [];
-  query = (areas || fields || subjects) !== '' ? req.query.query : '*:*'; // input
-  const date = req.query.date ? req.query.date : null;
-
+  const areas = req.query.areas ? JSON.parse(req.query.areas).areas : []; // areas, fields, subjects, date
+  const fields = req.query.fields ? JSON.parse(req.query.fields).fields : [];
+  const subjects = req.query.subjects ? JSON.parse(req.query.subjects).subjects : [];
+  query = (areas.length || fields.length || subjects.length || req.query.query) ? req.query.query : '*:*'; // input
+  const date = req.query.date ? JSON.parse(req.query.date).date : null;
+  console.log("eq.query: ", req)
   // General Parameters
   const params = new URLSearchParams();
   params.append('q.op', 'AND');
@@ -101,12 +103,26 @@ app.get('/search', async (req, res) => {
   params.append('hl', 'true');
   params.append('hl.simple.pre', '<b>');
   params.append('hl.simple.post', '</b>');
-  params.append('hl.fl', 'summary title');
-  // Date
+
+  let highliteds = ""
+  if (areas.length > 0) {
+    highliteds = highliteds.concat(" areas")
+  }
+  if (fields.length > 0) {
+    highliteds = highliteds.concat(" fields")
+  }
+  if (subjects.length > 0) {
+    highliteds = highliteds.concat(" subjects")
+  }
+  if (req.query.query) {
+    highliteds = highliteds.concat(" title summary authors")
+  }
+
+  params.append('hl.fl', highliteds);
   if (date) {
     params.append('fq', `date:[${date[0]} TO ${date[1]}]`);
   }
-
+ 
   // Area
   areas.forEach((area) => {
     query = query.concat(' ', `areas:(${area})`);
@@ -132,12 +148,17 @@ app.get('/search', async (req, res) => {
   // Request
   const response = await requestSolr(params);
   console.log(params);
-  const data = [];
+  var data = [];
+
   response.data.response.docs.forEach((item) => {
     data.push(item);
+
   });
 
+  console.log("response.data.response.highlighting: ", response.data.highlighting)
+
   const reply = {
+    hightlightings: response.data.highlighting,
     papers: data,
     total: response.data.response.numFound,
     pages: Math.ceil(response.data.response.numFound / 10),

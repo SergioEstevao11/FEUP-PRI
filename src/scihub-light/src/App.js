@@ -1,29 +1,23 @@
-import logo from './logo.svg';
 import './App.css';
 // import Alert from 'react-bootstrap/Alert';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
+import React from "react";
+import HomePage from './pages/HomePage';
+import SearchResult from './pages/SearchResults'; 
 
-import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
+
+
   return (
     <>
-      {[
-        'primary',
-        'secondary',
-        'success',
-        'danger',
-        'warning',
-        'info',
-        'light',
-        'dark',
-      ].map((variant) => (
-        <div className={`d-flex align-content-center justify-content-center alert alert-${variant}`} key={variant}>
-          This is a {variant} alert with{' '}
-          <div><a href="#">an example link</a></div>Give it a click if
-          you like.
-        </div>
-      ))}
+     <Router>
+      <Routes>
+        <Route path="/" element={<HomePage/>} />
+        <Route path="/searchresults/:query" element={<SearchResult/>} />
+      </Routes>
+    </Router>
     </>
   );
 }
