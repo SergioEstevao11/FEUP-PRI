@@ -4,34 +4,20 @@ import React from "react";
 import SearchBar from '../components/SearchBar';
 import ArticleCard from '../components/ArticleCard';
 import arxiv_logo from '../assets/arxiv_logo.png';
+import Axios  from 'axios';
 
 
 export default function SearchResult() {
 
-    const results = {
-        "link": "http://arxiv.org/abs/1508.03329v1",
-        "summary": "When faced with learning a set of inter-related tasks from a limited amount\nof usable data, learning each task independently may lead to poor\ngeneralization performance. Multi-Task Learning (MTL) exploits the latent\nrelations between tasks and overcomes data scarcity limitations by co-learning\nall these tasks simultaneously to offer improved performance. We propose a\nnovel Multi-Task Multiple Kernel Learning framework based on Support Vector\nMachines for binary classification tasks. By considering pair-wise task\naffinity in terms of similarity between a pair's respective feature spaces, the\nnew framework, compared to other similar MTL approaches, offers a high degree\nof flexibility in determining how similar feature spaces should be, as well as\nwhich pairs of tasks should share a common feature space in order to benefit\noverall performance. The associated optimization problem is solved via a block\ncoordinate descent, which employs a consensus-form Alternating Direction Method\nof Multipliers algorithm to optimize the Multiple Kernel Learning weights and,\nhence, to determine task affinities. Empirical evaluation on seven data sets\nexhibits a statistically significant improvement of our framework's results\ncompared to the ones of several other Clustered Multi-Task Learning methods.",
-        "title": "Multi-Task Learning with Group-Specific Feature Space Sharing",
-        "authors": [
-         "Niloofar Yousefi",
-         "Michael Georgiopoulos",
-         "Georgios C. Anagnostopoulos"
-        ],
-        "date": "2015-8-13",
-        "areas": [
-         "Computer Science"
-        ],
-        "fields": [
-         "Computer Science"
-        ],
-        "subjects": [
-         "Machine Learning"
-        ],
-        "id": 32823
-    }
+    const [results, setResults] = React.useState({papers: {}});
 
     function moreLikeThis(){
         console.log("moreLikeThis")
+        Axios.get("http://localhost:3001/moreLikeThis/34768").then((response) => {
+            console.log(response);
+            }).catch((error) => {
+            console.log(error);
+            });
     }
 
   return (
@@ -43,7 +29,7 @@ export default function SearchResult() {
         <div class="row">
             <div class="d-flex align-items-center justify-content-center" >
                 <div class="w-50 my-3">
-                <SearchBar />
+                <SearchBar setResults={setResults}/>
                 </div>
             </div>
         </div>
@@ -55,17 +41,8 @@ export default function SearchResult() {
         </div>
       
         <div class="row justify-content-around">
-            {/* { data.results.map(paper => <div class="col-10"> <ArticleCard data={paper} /> </div>) } */}
-            
-            <div class="col-10">
-                <ArticleCard data={results}/>
-            </div>
-            <div class="col-10">
-                <ArticleCard data={results}/>
-            </div>
-            <div class="col-10">
-                <ArticleCard data={results}/>
-            </div>  
+            {/* { results.data.papers.map(paper => <div class="col-10"> <ArticleCard data={paper} /> </div>) } */}
+            {Object.entries(results.papers).map(([key, value]) =>  <div class="col-10"> <ArticleCard data={value}/> </div>)}
         </div>
      
     </>

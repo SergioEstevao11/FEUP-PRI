@@ -8,23 +8,25 @@ import Typography from '@mui/material/Typography';
 
 
 export default function ArticleCard({data}) {
+    const date = (new Date(data.date)).toString().split(" ").slice(1,4).join(" ");
+
     const card = (
         <React.Fragment>
           <CardContent>
             <Typography sx={{ fontSize: 12 }} color="text.secondary" gutterBottom>
-              Areas: {data.areas} ; Fields: {data.fields} ; Subfields: {data.subfields}
+              Areas:  <span dangerouslySetInnerHTML={{__html: data.areas}}></span> ; Fields:  <span dangerouslySetInnerHTML={{__html: data.fields}}></span> ; Subjects:  <span dangerouslySetInnerHTML={{__html: data.subjects}}></span>
             </Typography>
             <Typography variant="h5" component="div">
-              {data.title}
+                <div dangerouslySetInnerHTML={{__html: data.title}}></div>
             </Typography>
             <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                {data.authors}
+            <div dangerouslySetInnerHTML={{__html: data.authors}}></div>
                 <br/>
-                {data.date}
+                {date}
                 
             </Typography>
             <Typography variant="body2">
-              {data.summary}
+                <div dangerouslySetInnerHTML={{__html: data.summary}}></div>
               <br />
             </Typography>
           </CardContent>

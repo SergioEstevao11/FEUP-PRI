@@ -7,11 +7,12 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import tags from '../fixtures/tags.json';
 import { useNavigate } from "react-router-dom";
+import Axios  from 'axios';
 
 
 
 
-export default function SearchBar() {
+export default function SearchBar({setResults}) {
   const [selectedAreas, setSelectedAreas] = useState();
   const [selectedFields, setSelectedFields] = useState();
   const [selectedSubjects, setSelectedSubjects] = useState();
@@ -65,21 +66,55 @@ export default function SearchBar() {
     
     if (selectedSubjects !== undefined)
       subjects = selectedSubjects.map((subject) => subject.value);
+
     
+    let search = document.getElementById("query_search").value;
     let ld = new Date(oldestDate);
     let rd = new Date(recentDate);
-    let leftDate = ld.getFullYear() + "-" + (ld.getMonth() + 1) + "-" + ld.getDate();
-    let rightDate = rd.getFullYear() + "-" + (rd.getMonth() + 1) + "-" + rd.getDate();
+    let leftDate = ld.getFullYear() + "-" + (ld.getMonth() + 1) + "-" + ld.getDate() + "T00:00:00Z";
+    let rightDate = rd.getFullYear() + "-" + (rd.getMonth() + 1) + "-" + rd.getDate() + "T00:00:00Z";
 
     let queryData = {
-      areas: areas,
-      fields: fields,
-      subjects: subjects,
-      oldestDate: leftDate,
-      recentDate: rightDate
+      query: search,
+      sort: "Relevance",
+      areas: JSON.stringify({areas: areas}),
+      fields: JSON.stringify({fields: fields}),
+      subjects: JSON.stringify({subjects: subjects}),
+      date: JSON.stringify({date:[leftDate, rightDate]})
     }
 
-    //call endpoint
+    console.log("here")
+
+    Axios.get("http://localhost:3001/search",{params: queryData}).then((response) => {
+      console.log(response);
+      let data = response.data;
+      
+      for (let i = 0; i < data.papers.length; i++) {
+        console.log(typeof(data.hightlightings[data.papers[i].id]))
+        for (let key in data.hightlightings[data.papers[i].id]) {
+          let value = data.hightlightings[data.papers[i].id][key];
+          if (key === "title" || key === "summary"){
+            let to_match = value[0].replace("<b>", "").replace("</b>", "");
+            let match_index = data.papers[i][key].indexOf(to_match);
+            let start = data.papers[i][key].substring(0, match_index);
+            let end = data.papers[i][key].substring(match_index + to_match.length);
+            data.papers[i][key] = start + value[0] + end;
+            console.log(data.papers[i][key])
+          }
+          else{
+            data.papers[i][key] = value;
+          }
+          
+        }
+        
+      }
+
+      console.log(data)
+
+      setResults(data);
+    }).catch((error) => {
+      console.log(error);
+    });
 
     navigate("/searchresults/query");
     
@@ -90,7 +125,7 @@ export default function SearchBar() {
     <>
       <div class="container">
           <div class="input-group py-auto">
-            <input type="search" class="form-control" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+            <input type="search" class="form-control" placeholder="Search" aria-label="Search" aria-describedby="search-addon" id="query_search"/>
             <button type="button" class="btn btn-primary" onClick={showFilters}>Filters</button>     
             <button type="button" class="btn btn-outline-primary" onClick={search}>Search</button>
           </div>
