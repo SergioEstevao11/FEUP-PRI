@@ -22,10 +22,8 @@ export default function SearchBar({setResults, orderChanged, setOrderChanged}) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (orderChanged){
-      search();
-    }
-  }, []);
+    if (orderChanged) search();
+  }, [orderChanged]);
 
   // Array of all options
   var AreasList = tags.areas.map((area) => {

@@ -12,7 +12,7 @@ export default function SearchResult() {
     const [results, setResults] = React.useState({papers: {}});
     const [orderChanged, setOrderChanged] = React.useState(false);
 
-    useEffect(() => {}, [results, orderChanged]);
+    useEffect(() => {}, [results]);
 
     async function moreLikeThis(){
         console.log("moreLikeThis")
@@ -64,7 +64,7 @@ export default function SearchResult() {
 
             <div class="d-flex align-items-center justify-content-start">
                 <div class="mb-2" style={{marginLeft: "17.2%"}}>
-                <select class="form-select" aria-label="Default select example" id="orderBySelect" style={{visibility:"hidden"}} onChange={setOrderChanged(true)}>
+                <select class="form-select" aria-label="Default select example" id="orderBySelect" style={{visibility:"hidden"}} onChange={() => setOrderChanged(true)}>
                     <option selected value="Relevance">Relevance</option>
                     <option value="date asc">Date Ascending</option>
                     <option value="date desc">Date Descending</option>
