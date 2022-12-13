@@ -6,7 +6,7 @@ import numpy as np
 import pandas as pd
 
 #data for query evalution
-BOOSTED = True
+BOOSTED = False
 QUERY_ID = "q4"
 QUERY_URL = "http://localhost:8983/solr/papers/select?defType=edismax&indent=true&q.op=AND&q=areas%3A(statistics)%20new%20approaches%20linguistics&qf=link%20summary%20title%20authors%20date%20areas%20fields%20subjects&rows=50"
 
