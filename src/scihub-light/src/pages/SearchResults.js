@@ -55,6 +55,7 @@ export default function SearchResult() {
         </div>
       
         <div class="row justify-content-around">
+            {/* { data.results.map(paper => <div class="col-10"> <ArticleCard data={paper} /> </div>) } */}
             
             <div class="col-10">
                 <ArticleCard data={results}/>
