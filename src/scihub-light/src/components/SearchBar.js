@@ -74,7 +74,12 @@ export default function SearchBar({setResults, orderChanged, setOrderChanged}) {
 
     
     let search = document.getElementById("query_search").value;
-    let sortType = document.getElementById("orderBySelect").value;
+    let sortType;
+    if (document.getElementById("orderBySelect")) {
+      sortType = document.getElementById("orderBySelect").value;
+    } else {
+      sortType = "Relevance";
+    }
     let ld = new Date(oldestDate);
     let rd = new Date(recentDate);
     let leftDate = ld.getFullYear() + "-" + (ld.getMonth() + 1) + "-" + ld.getDate() + "T00:00:00Z";
@@ -89,14 +94,11 @@ export default function SearchBar({setResults, orderChanged, setOrderChanged}) {
       date: JSON.stringify({date:[leftDate, rightDate]})
     }
 
-    console.log("here")
-
     Axios.get("http://localhost:3001/search",{params: queryData}).then((response) => {
       console.log(response);
       let data = response.data;
       
       for (let i = 0; i < data.papers.length; i++) {
-        console.log(typeof(data.hightlightings[data.papers[i].id]))
         for (let key in data.hightlightings[data.papers[i].id]) {
           let value = data.hightlightings[data.papers[i].id][key];
           if (key === "title" || key === "summary"){
@@ -105,7 +107,6 @@ export default function SearchBar({setResults, orderChanged, setOrderChanged}) {
             let start = data.papers[i][key].substring(0, match_index);
             let end = data.papers[i][key].substring(match_index + to_match.length);
             data.papers[i][key] = start + value[0] + end;
-            console.log(data.papers[i][key])
           }
           else{
             data.papers[i][key] = value;
@@ -124,30 +125,27 @@ export default function SearchBar({setResults, orderChanged, setOrderChanged}) {
         document.getElementById("orderBySelect").style.visibility = "hidden";
         document.getElementById("moreLikeThisBtn").style.visibility = "hidden";
       }
-
-      console.log(data)
-
       setResults(data);
     }).catch((error) => {
       console.log(error);
     });
 
-    navigate("/searchresults/query");
+    navigate("/searchresults");
     
   }
 
 
   return (
     <>
-      <div class="container">
-          <div class="input-group py-auto">
-            <input type="search" class="form-control" placeholder="Search" aria-label="Search" aria-describedby="search-addon" id="query_search"/>
-            <button type="button" class="btn btn-primary" onClick={showFilters}>Filters</button>     
-            <button type="button" class="btn btn-outline-primary" onClick={search}>Search</button>
+      <div className="container">
+          <div className="input-group py-auto">
+            <input type="search" className="form-control" placeholder="Search" aria-label="Search" aria-describedby="search-addon" id="query_search"/>
+            <button type="button" className="btn btn-primary" onClick={showFilters}>Filters</button>     
+            <button type="button" className="btn btn-outline-primary" onClick={search}>Search</button>
           </div>
-        <div class="form mt-3" id="filters" style={{visibility: "hidden"}}>
-        <div class="row">
-            <div class="col-6" style={{paddingLeft: 15 + '%'}}>
+        <div className="form mt-3" id="filters" style={{visibility: "hidden"}}>
+        <div className="row">
+            <div className="col-6" style={{paddingLeft: 15 + '%'}}>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
                     label="Oldest"
@@ -159,7 +157,7 @@ export default function SearchBar({setResults, orderChanged, setOrderChanged}) {
                 />
                 </LocalizationProvider>
             </div>
-            <div class="col-6">
+            <div className="col-6">
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
                     label="Earliest"
@@ -172,8 +170,8 @@ export default function SearchBar({setResults, orderChanged, setOrderChanged}) {
                 </LocalizationProvider>
             </div>
         </div>
-        <div class="row mt-3">
-        <div class="col-4">
+        <div className="row mt-3">
+        <div className="col-4">
                 <Select id="areas"
                 options={AreasList}
                 placeholder="Select Areas"
@@ -182,7 +180,7 @@ export default function SearchBar({setResults, orderChanged, setOrderChanged}) {
                 isSearchable={true}
                 isMulti/>
             </div>
-            <div class="col-4">
+            <div className="col-4">
                 <Select id="fields"
                 options={FieldsList}
                 placeholder="Select Fields"
@@ -192,7 +190,7 @@ export default function SearchBar({setResults, orderChanged, setOrderChanged}) {
                 isMulti
                 />
             </div>
-            <div class="col-4">
+            <div className="col-4">
 
             <Select id="subjects"
                 options={SubjectsList}

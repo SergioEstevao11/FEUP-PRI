@@ -15,8 +15,7 @@ export default function SearchResult() {
     useEffect(() => {}, [results]);
 
     async function moreLikeThis(){
-        console.log("moreLikeThis")
-        const collection = document.getElementsByClassName("result_checkbox");
+        const collection = document.getElementsByclassNameName("result_checkbox");
         var mlt_results = {};
         let first = true;
         if(collection.length === 0)
@@ -40,7 +39,6 @@ export default function SearchResult() {
             }
         }
         
-        console.log("mlt_results: ", mlt_results)
         setResults(mlt_results);
         
     }
@@ -51,38 +49,38 @@ export default function SearchResult() {
             <img src={arxiv_logo} alt="arxiv_logo" style={{position:"absolute", width: "100px", margin:"15px"}}/>        
         </div>
       
-        <div class="row">
-            <div class="d-flex align-items-center justify-content-center" >
-                <div class="w-50 my-3">
+        <div className="row">
+            <div className="d-flex align-items-center justify-content-center" >
+                <div className="w-50 my-3">
                 <SearchBar setResults={setResults} orderChanged={orderChanged} setOrderChanged={setOrderChanged}/>
                 </div>
             </div>
         </div>
 
-        <div class="row">
-            <div class="col-6">
+        <div className="row">
+            <div className="col-6">
 
-            <div class="d-flex align-items-center justify-content-start">
-                <div class="mb-2" style={{marginLeft: "17.2%"}}>
-                <select class="form-select" aria-label="Default select example" id="orderBySelect" style={{visibility:"hidden"}} onChange={() => setOrderChanged(true)}>
-                    <option selected value="Relevance">Relevance</option>
+            <div className="d-flex align-items-center justify-content-start">
+                <div className="mb-2" style={{marginLeft: "17.2%"}}>
+                <select className="form-select" aria-label="Default select example" id="orderBySelect" style={{visibility:"hidden"}} onChange={() => setOrderChanged(true)}>
+                    <option defaultValue value="Relevance">Relevance</option>
                     <option value="date asc">Date Ascending</option>
                     <option value="date desc">Date Descending</option>
                 </select>
                 </div>
             </div>
             </div>
-            <div class="col-6">
-                <div class="d-flex align-items-center justify-content-end">
-                    <div class="mb-2" style={{marginRight: "25.5%"}}>
-                    <button type="button" id="moreLikeThisBtn" class="btn btn-warning" onClick={moreLikeThis} style={{visibility:"hidden"}}>MoreLike...</button>
+            <div className="col-6">
+                <div className="d-flex align-items-center justify-content-end">
+                    <div className="mb-2" style={{marginRight: "25.5%"}}>
+                    <button type="button" id="moreLikeThisBtn" className="btn btn-warning" onClick={moreLikeThis} style={{visibility:"hidden"}}>MoreLike...</button>
                     </div>
                 </div>
             </div>
         </div>
       
-        <div class="row justify-content-around">
-            {Object.entries(results.papers).map(([key, value]) =>  <div class="col-10"> <ArticleCard data={value}/> </div>)}
+        <div className="row justify-content-around">
+            {Object.entries(results.papers).map(([key, value]) =>  <div className="col-10"> <ArticleCard data={value}/> </div>)}
         </div>
      
     </>

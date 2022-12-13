@@ -15,7 +15,7 @@ function App() {
      <Router>
       <Routes>
         <Route path="/" element={<HomePage/>} />
-        <Route path="/searchresults/:query" element={<SearchResult/>} />
+        <Route path="/searchresults/" element={<SearchResult/>} />
       </Routes>
     </Router>
     </>

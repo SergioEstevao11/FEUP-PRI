@@ -36,11 +36,11 @@ export default function ArticleCard({data}) {
         </React.Fragment>
       );
   return (
-    <Box sx={{ minWidth: 275}}>
+    <Box sx={{ minWidth: 275}} key={data.id}>
 
       <Card variant="outlined">
-        <div class="d-flex" style={{marginLeft: "90%"}}>
-            <input type="checkbox" class="result_checkbox" id={data.id}/>
+        <div className="d-flex" style={{marginLeft: "90%"}}>
+            <input type="checkbox" className="result_checkbox" id={data.id}/>
             <label for={data.id}>This!</label>
         </div>
       {card}

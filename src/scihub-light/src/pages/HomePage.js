@@ -10,10 +10,10 @@ export default function HomePage() {
 
   return (
     <>
-      <div class="d-flex align-items-center justify-content-center" style={{height: 100 + 'vh'}}>
-      <div class="w-50">
-        <div class="py-5">
-          <h1 class="text-center">Arxiv Light</h1>
+      <div className="d-flex align-items-center justify-content-center" style={{height: 100 + 'vh'}}>
+      <div className="w-50">
+        <div className="py-5">
+          <h1 className="text-center">Arxiv Light</h1>
         </div>
         
           <SearchBar />

@@ -5,6 +5,8 @@ const app = express();
 app.use(express.json());
 const PORT = process.env.PORT || 3001;
 
+const c = console;
+
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
@@ -18,18 +20,18 @@ const solr = axios.create({
   timeout: 5000,
 });
 
-const requestSolr = (params) => solr.get('/select', {params: params}).catch((error) => {
-  console.log(error);
+const requestSolr = (params) => solr.get('/select', { params }).catch((error) => {
+  c.log(error);
 });
 
-const requestSolrMoreLikeThis = () => solr.post('/config',  {
-  "add-requesthandler": {
-    name: "/mlt",
-    class: "solr.MoreLikeThisHandler",
-    defaults: {"mlt.fl": "body"}
-  }
+const requestSolrMoreLikeThis = () => solr.post('/config', {
+  'add-requesthandler': {
+    name: '/mlt',
+    class: 'solr.MoreLikeThisHandler',
+    defaults: { 'mlt.fl': 'body' },
+  },
 }).catch((error) => {
-  console.log(error);
+  c.log(error);
 });
 
 app.get('/paper/:id', async (req, res) => {
@@ -48,8 +50,7 @@ app.get('/paper/:id', async (req, res) => {
 
 app.get('/moreLikeThis/:id', async (req, res) => {
   // Request Parameters
-  console.log("MoreLikeThis")
-  const id = req.params.id; // dates asc desc by relevance
+  const { id } = req.params;
 
   // General Parameters
   const params = new URLSearchParams();
@@ -64,7 +65,6 @@ app.get('/moreLikeThis/:id', async (req, res) => {
 
   // Request
   const response = await requestSolr(params);
-  console.log(params);
   const data = [];
   response.data.response.docs.forEach((item) => {
     data.push(item);
@@ -76,22 +76,21 @@ app.get('/moreLikeThis/:id', async (req, res) => {
     pages: Math.ceil(response.data.response.numFound / 10),
   };
 
-  console.log(reply)
-
   res.status(200).json(reply);
 });
 
 app.get('/search', async (req, res) => {
-  let query = "";
+  let query = '';
+
   // Request Parameters
-  const sort = req.query.sort ? req.query.sort : null; // dates asc desc by relevance
+  const sort = req.query.sort ? req.query.sort : null; // dates asc or desc
   const page = req.query.page ? req.query.page - 1 : 0; // page number
-  const areas = req.query.areas ? JSON.parse(req.query.areas).areas : []; // areas, fields, subjects, date
+  const areas = req.query.areas ? JSON.parse(req.query.areas).areas : [];
   const fields = req.query.fields ? JSON.parse(req.query.fields).fields : [];
   const subjects = req.query.subjects ? JSON.parse(req.query.subjects).subjects : [];
   query = (areas.length || fields.length || subjects.length || req.query.query) ? req.query.query : '*:*'; // input
   const date = req.query.date ? JSON.parse(req.query.date).date : null;
-  console.log("eq.query: ", req)
+
   // General Parameters
   const params = new URLSearchParams();
   params.append('q.op', 'AND');
@@ -104,25 +103,25 @@ app.get('/search', async (req, res) => {
   params.append('hl.simple.pre', '<b>');
   params.append('hl.simple.post', '</b>');
 
-  let highliteds = ""
+  let highliteds = '';
   if (areas.length > 0) {
-    highliteds = highliteds.concat(" areas")
+    highliteds = highliteds.concat(' areas');
   }
   if (fields.length > 0) {
-    highliteds = highliteds.concat(" fields")
+    highliteds = highliteds.concat(' fields');
   }
   if (subjects.length > 0) {
-    highliteds = highliteds.concat(" subjects")
+    highliteds = highliteds.concat(' subjects');
   }
   if (req.query.query) {
-    highliteds = highliteds.concat(" title summary authors")
+    highliteds = highliteds.concat(' title summary authors');
   }
 
   params.append('hl.fl', highliteds);
   if (date) {
     params.append('fq', `date:[${date[0]} TO ${date[1]}]`);
   }
- 
+
   // Area
   areas.forEach((area) => {
     query = query.concat(' ', `areas:(${area})`);
@@ -141,21 +140,17 @@ app.get('/search', async (req, res) => {
   params.append('q', query);
 
   // Sort
-  if (sort && sort !== 'Relevance') { 
+  if (sort && sort !== 'Relevance') {
     params.append('sort', sort);
   }
 
   // Request
   const response = await requestSolr(params);
-  console.log(params);
-  var data = [];
+  const data = [];
 
   response.data.response.docs.forEach((item) => {
     data.push(item);
-
   });
-
-  console.log("response.data.response.highlighting: ", response.data.highlighting)
 
   const reply = {
     hightlightings: response.data.highlighting,
@@ -168,6 +163,6 @@ app.get('/search', async (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Server listening on ${PORT}`);
+  c.log(`Server listening on ${PORT}`);
   requestSolrMoreLikeThis();
 });
