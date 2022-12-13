@@ -101,7 +101,7 @@ app.get('/search', async (req, res) => {
   params.append('hl', 'true');
   params.append('hl.simple.pre', '<b>');
   params.append('hl.simple.post', '</b>');
-  params.append('hl.fl', 'title');
+  params.append('hl.fl', 'summary title');
   // Date
   if (date) {
     params.append('fq', `date:[${date[0]} TO ${date[1]}]`);
