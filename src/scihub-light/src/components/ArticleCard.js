@@ -1,0 +1,48 @@
+import * as React from 'react';
+import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+
+
+export default function ArticleCard({data}) {
+    const card = (
+        <React.Fragment>
+          <CardContent>
+            <Typography sx={{ fontSize: 12 }} color="text.secondary" gutterBottom>
+              Areas: {data.areas} ; Fields: {data.fields} ; Subfields: {data.subfields}
+            </Typography>
+            <Typography variant="h5" component="div">
+              {data.title}
+            </Typography>
+            <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                {data.authors}
+                <br/>
+                {data.date}
+                
+            </Typography>
+            <Typography variant="body2">
+              {data.summary}
+              <br />
+            </Typography>
+          </CardContent>
+          <CardActions>
+            <Button size="small" href={data.link} target="_blank">Learn More</Button>
+          </CardActions>
+        </React.Fragment>
+      );
+  return (
+    <Box sx={{ minWidth: 275}}>
+
+      <Card variant="outlined">
+        <div class="d-flex" style={{marginLeft: "90%"}}>
+            <input type="checkbox" id={data.id}/>
+            <label for={data.id}>Relevant</label>
+        </div>
+      {card}
+      </Card>
+    </Box>
+  );
+}
