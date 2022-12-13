@@ -57,6 +57,10 @@ app.get('/moreLikeThis/:id', async (req, res) => {
   params.append('wt', 'json');
   params.append('defType', 'lucene');
   params.append('q', `{!mlt qf=title summary mintf=1 mindf=0}${id}`);
+  params.append('hl', 'true');
+  params.append('hl.simple.pre', '<b>');
+  params.append('hl.simple.post', '</b>');
+  params.append('hl.fl', 'title');
 
   // Request
   const response = await requestSolr(params);
@@ -94,7 +98,10 @@ app.get('/search', async (req, res) => {
   params.append('rows', '10');
   params.append('start', (page * 10).toString());
   params.append('qf', 'link summary^2 title^10 authors date areas^5 fields^5 subjects^5');
-
+  params.append('hl', 'true');
+  params.append('hl.simple.pre', '<b>');
+  params.append('hl.simple.post', '</b>');
+  params.append('hl.fl', 'title');
   // Date
   if (date) {
     params.append('fq', `date:[${date[0]} TO ${date[1]}]`);
